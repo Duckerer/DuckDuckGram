@@ -1,4 +1,4 @@
-package app.exteraless.updater;
+package com.duckduckgram.duckerer.updater;
 
 import android.app.Activity;
 import android.content.Context;

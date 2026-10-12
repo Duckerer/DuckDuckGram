@@ -36,6 +36,7 @@ public class DdgHeaderCell extends LinearLayout {
     /** Цвет подложки логотипа, как R.color.ic_background в exteraGram. */
     private static final int LOGO_BACKGROUND = 0xFF0048FF;
 
+    private ImageView logo;
     private Path shapePath;
 
     private Path shapePath() {
@@ -50,7 +51,7 @@ public class DdgHeaderCell extends LinearLayout {
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER);
 
-        ImageView logo = new ImageView(context) {
+        logo = new ImageView(context) {
             @Override
             public void draw(Canvas canvas) {
                 canvas.save();
@@ -93,6 +94,12 @@ public class DdgHeaderCell extends LinearLayout {
         version.setText(buildVersionString());
         addView(version, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT,
                 Gravity.TOP | Gravity.CENTER_HORIZONTAL, 60, 2, 60, 28));
+    }
+
+    public void setOnLogoClickListener(android.view.View.OnClickListener listener) {
+        if (logo != null) {
+            logo.setOnClickListener(listener);
+        }
     }
 
     /** "12.9.2 (1258)" — версия плюс versionCode из PackageInfo, как в оригинале. */
