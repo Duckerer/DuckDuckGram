@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- DuckDuckGram: собственные строки клиента. Ключи с префиксом DDG. -->
+<resources>
+    <string name="DuckDuckGram" translatable="false">DuckDuckGram</string>
+    <string name="DuckDuckGramPreferences">Настройки DuckDuckGram</string>
+    <string name="DuckDuckGramPreferencesInfo">Telegram-клиент, где приватность на первом месте</string>
+
+    <string name="DDGCategoryChats">Чаты</string>
+    <string name="DDGCategoryMedia">Медиа</string>
+    <string name="DDGCategoryInterface">Интерфейс</string>
+    <string name="DDGCategoryAvatars">Аватарки и папки</string>
+    <string name="DDGCategoryPrivacy">Экран приватности</string>
+    <string name="DDGCategoryTypography">Типографика</string>
+    <string name="DDGCategoryTranslate">Перевод</string>
+    <string name="DDGCategoryStorage">Хранилище и сеть</string>
+    <string name="DDGCategoryGhost">Режим «Призрака»</string>
+    <string name="DDGCategoryAyuMoments">AyuMoments</string>
+    <string name="DDGCategoryMonet">Тема Monet</string>
+    <string name="DDGCategoryAppearance">Оформление</string>
+    <string name="DDGCategoryPlugins">Плагины</string>
+    <string name="DDGCategoryJavaPlugins">Java-плагины</string>
+    <string name="DDGCategoryProfile">Локальный профиль</string>
+    <string name="DDGCategorySupporters">Поддержавшие</string>
+    <string name="DDGCategoryLogin">Вход</string>
+    <string name="DDGCategoryOther">Прочее</string>
+    <string name="DDGCategoryDonate">Донат</string>
+
+    <!-- Chats -->
+    <string name="DDGConfirmSend">Подтверждение отправки</string>
+    <string name="DDGConfirmSendInfo">Спрашивать, прежде чем сообщение уйдёт из поля ввода</string>
+    <string name="DDGConfirmSendTitle">Отправить?</string>
+    <string name="DDGConfirmSendMessage">Отправить это сообщение?</string>
+    <string name="DDGConfirmSendStickerMessage">Отправить этот стикер?</string>
+    <string name="DDGConfirmSendGifMessage">Отправить этот GIF?</string>
+    <string name="DDGConfirmSendPhotoTitle">Отправить это фото?</string>
+    <string name="DDGConfirmSendVideoTitle">Отправить это видео?</string>
+    <string name="DDGConfirmSendMediaTitleMultiple">Отправить файлов: %1$d?</string>
+    <string name="DDGConfirmSendMediaMessage">Они уйдут как есть, и отменить отправку не получится</string>
+    <string name="DDGDisableBigEmoji">Отключить большие эмодзи</string>
+    <string name="DDGCommaAfterMention">Добавлять запятую после @упоминаний</string>
+    <string name="DDGSecondsInClock">Показывать секунды на часах</string>
+    <string name="DDGDeleteForEveryoneDefault">«Удалить у всех» по умолчанию</string>
+    <string name="DDGQuickDuplicate">Быстрое дублирование сообщения</string>
+    <string name="DDGQuickDuplicateInfo">Свайп по сообщению создаёт его копию</string>
+    <string name="DDGDoubleTapReaction">Реакция по двойному тапу</string>
+    <string name="DDGDoubleTapReactionNone">Выкл.</string>
+    <string name="DDGDoubleTapReactionLike">Нравится</string>
+    <string name="DDGDoubleTapReactionDislike">Не нравится</string>
+    <string name="DDGDoubleTapReactionWow">Вау</string>
+    <string name="DDGDoubleTapReactionHeart">Сердце</string>
+    <string name="DDGDoubleTapReactionFire">Огонь</string>
+    <string name="DDGDoubleTapReactionParty">Праздник</string>
+    <string name="DDGSendOnlyOnline">Отправлять только когда собеседник онлайн</string>
+    <string name="DDGSendOnlyOnlineInfo">Придержать сообщение, пока получатель не появится в сети</string>
+    <string name="DDGSendOnlyOnlineHeld">Сообщение в очереди, уйдёт, когда %1$s появится в сети</string>
+    <string name="DDGMillisecondTimestamp">Точное время с миллисекундами</string>
+    <string name="DDGOriginalDateOnForward">Исходная дата у пересланных сообщений</string>
+    <string name="DDGJumpToFirstMessage">Переход к первому сообщению</string>
+    <string name="DDGJumpToFirstMessageInfo">Добавляет пункт «в начало» в меню чата</string>
+    <string name="DDGHighlightAllChats">Подсвечивать все чаты</string>
+    <string name="DDGMessageFilter">Фильтр сообщений и анти-спам</string>
+    <string name="DDGMessageFilterInfo">Ключевые слова для скрытия, по чатам</string>
+    <string name="DDGMessageFilterKeywords">Заблокированные ключевые слова</string>
+    <string name="DDGMessageFilterHint">По одному слову в строке</string>
+    <string name="DDGMessageFilterEmpty">Ключевых слов пока нет</string>
+    <string name="DDGBubbleDesign">Форма пузырей</string>
+    <string name="DDGBubbleDesignDefault">По умолчанию</string>
+    <string name="DDGBubbleDesignCompact">Компактная</string>
+    <string name="DDGBubbleDesignLarge">Крупная</string>
+    <string name="DDGQuickShareMedia">Быстрая отправка в чат</string>
+    <string name="DDGQuickShareMediaInfo">При удержании пузыря сообщения поверх открываются недавние чаты, и копия сообщения сразу уходит в выбранный чат. Кнопка была в форке и раньше, но всегда включённой — теперь она за этим переключателем</string>
+    <string name="DDGForwardWithoutQuote">Пересылать без цитаты</string>
+    <string name="DDGDisableLinkPreview">Отключить предпросмотр ссылок</string>
+    <string name="DDGForceCopy">Всегда копировать</string>
+    <string name="DDGForceCopyInfo">Любой ввод считается копипастом, панель форматирования не появляется</string>
+    <string name="DDGSkipUndoTimer">Пропускать таймер отмены</string>
+    <string name="DDGQuickReplyLongPress">Быстрый ответ по долгому нажатию</string>
+    <string name="DDGKeepOriginalFileNames">Сохранять исходные имена файлов</string>
+    <string name="DDGHideMessageTime">Скрывать время в сообщениях</string>
+    <string name="DDGHideMessageTimeInfo">Убирает отметку времени внутри пузырей сообщений. Отметки о прочтении остаются видимыми.</string>
+
+    <!-- Media -->
+    <string name="DDGRestyledPlayer">Обновлённый аудиоплеер</string>
+    <string name="DDGRestyledPlayerInfo">Во внутричатовом плеере: за полосой прогресса появляется приглушённая дорожка акцента, поэтому видна вся шкала, а сама полоса становится тоньше</string>
+    <string name="DDGRearCameraPriority">Приоритет основной камеры для видео</string>
+    <string name="DDGNoiseSuppression">Шумоподавление в голосовых сообщениях</string>
+    <string name="DDGStickerSize">Размер стикеров</string>
+    <string name="DDGStickerSizeSmall">Маленький</string>
+    <string name="DDGStickerSizeNormal">Обычный</string>
+    <string name="DDGStickerSizeLarge">Большой</string>
+    <string name="DDGVoiceToTextAI">Голос в текст с ИИ</string>
+    <string name="DDGVoiceToTextProvider">ИИ-провайдер</string>
+    <string name="DDGApiKey">Ключ API</string>
+    <string name="DDGApiKeyHint">Ваш собственный ключ, хранится только на устройстве</string>
+    <string name="DDGApiKeyMissing">Ключ API не задан</string>
+
+    <!-- Interface -->
+    <string name="DDGCompactSidebar">Компактное боковое меню</string>
+    <string name="DDGCompactSidebarInfo">Короче пункты меню, ниже шапка и строки аккаунтов, поэтому в меню помещается больше без прокрутки</string>
+    <string name="DDGHideComposeIcon">Скрыть значок «Написать»</string>
+    <string name="DDGMenuStyles">Стили меню</string>
+    <string name="DDGMenuStyleDefault">По умолчанию</string>
+    <string name="DDGMenuStyleCompact">Компактный</string>
+    <string name="DDGMenuStyleList">Список</string>
+    <string name="DDGSidebarEditor">Редактор бокового меню</string>
+    <string name="DDGSidebarEditorInfo">Изменяйте порядок и скрывайте пункты бокового меню</string>
+    <string name="DDGStickerPackMenu">Улучшенное меню набора стикеров</string>
+    <string name="DDGBuiltInBrowser">Встроенный браузер</string>
+    <string name="DDGBuiltInBrowserInfo">Открывать ссылки внутри приложения, а не в системном браузере</string>
+    <string name="DDGForbidChannelSwitch">Запретить переключение каналов</string>
+    <string name="DDGMutualContacts">Открывать список общих контактов</string>
+    <string name="DDGMutualContactsInfo">Нажмите на значок общих контактов, чтобы увидеть, кто у вас общий</string>
+    <string name="DDGMutualContactsTitle">Общие контакты</string>
+    <string name="DDGUnreadMutesAbovePins">Непрочитанные без звука над закреплёнными</string>
+    <string name="DDGUnlimitedPinnedChats">Неограниченные закреплённые чаты</string>
+    <string name="DDGHideAllStories">Скрыть все истории</string>
+    <string name="DDGMergeMessages">Объединять сообщения</string>
+    <string name="DDGDisableVibration">Отключить вибрацию</string>
+    <string name="DDGDisableTrends">Отключить тренды</string>
+    <string name="DDGUnlimitedAccounts">Неограниченное число аккаунтов</string>
+
+    <!-- Avatars and folders -->
+    <string name="DDGAvatarInHeader">Аватарка всегда в шапке чата</string>
+    <string name="DDGUnlimitedFolders">Неограниченное число папок</string>
+    <string name="DDGMoveAllChatsToFolder">Переместить все чаты в папку</string>
+    <string name="DDGMoveAllChatsToFolderInfo">Разом добавить все чаты в одну папку</string>
+
+    <!-- Privacy -->
+    <string name="DDGPrivacyScreen">Приватность экрана в переключателе приложений</string>
+    <string name="DDGPrivacyScreenInfo">Прячет окно приложения от скриншотов, пока оно в фоне, поэтому предпросмотр в переключателе задач остаётся пустым. Скриншоты снова доступны, как только вы вернётесь в Telegram</string>
+    <string name="DDGHideAvatarsInList">Скрывать аватарки в списке чатов</string>
+    <string name="DDGHideStickerInfoOnPhotos">Скрывать информацию о стикере на фото</string>
+
+    <!-- Streamer mode -->
+    <string name="DDGStreamerMode">Режим стримера</string>
+    <string name="DDGStreamerModeInfo">Пока он включён, в списке чатов нет предпросмотра сообщений, а в уведомлениях — ни текста, ни миниатюры медиа, ни аватарки. Номера телефонов, юзернеймы и ID тоже скрыты в профилях. Названия чатов, время и счётчики остаются видимы, и всё уже открытое остаётся на экране — для этого отключите опцию «Приватность экрана»</string>
+    <string name="DDGEnableStreamerMode">Включить режим стримера</string>
+    <string name="DDGDisableStreamerMode">Выключить режим стримера</string>
+    <string name="DDGStreamerModeEnabled">Режим стримера включён</string>
+    <string name="DDGStreamerModeDisabled">Режим стримера выключен</string>
+    <string name="DDGMessageHidden">Сообщение скрыто</string>
+    <string name="DDGStreamerModeHidden">Скрыто</string>
+
+    <!-- Typography -->
+    <string name="DDGSystemFont">Системный шрифт</string>
+    <string name="DDGSystemFontInfo">Игнорировать встроенные и свои шрифты</string>
+    <string name="DDGCustomFont">Свой шрифт</string>
+    <string name="DDGCustomFontHint">Выберите файл .ttf или .otf</string>
+    <string name="DDGCustomFontRestartInfo">Применится при следующем запуске приложения, как и настройка системного шрифта. Моноширинный текст использует свой шрифт</string>
+    <string name="DDGCustomFontReset">Сбросить свой шрифт</string>
+    <string name="DDGTextStyleEditor">Редактируемый стиль текста</string>
+    <string name="DDGTextStyleEditorInfo">Настройте размер, межстрочный интервал и насыщенность</string>
+    <string name="DDGTextSize">Размер текста</string>
+    <string name="DDGLineSpacing">Межстрочный интервал</string>
+    <string name="DDGTextSizeScaleInfo">Множитель поверх размера, заданного в «Оформлении»</string>
+    <string name="DDGScale80" translatable="false">80%</string>
+    <string name="DDGScale90" translatable="false">90%</string>
+    <string name="DDGScale100" translatable="false">100%</string>
+    <string name="DDGScale110" translatable="false">110%</string>
+    <string name="DDGScale125" translatable="false">125%</string>
+    <string name="DDGSpacingTight">Плотный</string>
+    <string name="DDGSpacingNormal">Обычный</string>
+    <string name="DDGSpacingRoomy">Свободный</string>
+    <string name="DDGSpacingLoose">Разреженный</string>
+
+    <!-- Translation -->
+    <string name="DDGRealtimeTranslation">Перевод чата в реальном времени</string>
+    <string name="DDGRealtimeTranslationInfo">Переводить входящие сообщения по мере поступления</string>
+    <string name="DDGTranslationTargetLanguage">Язык перевода</string>
+    <string name="DDGTranslationTargetAuto">Как в языке Telegram</string>
+
+    <!-- Storage and network -->
+    <string name="DDGCustomSavePath">Свой путь сохранения</string>
+    <string name="DDGCustomSavePathInfo">Куда записываются фото, видео и голосовые</string>
+    <string name="DDGNetworkAndProxy">Сеть и прокси</string>
+    <string name="DDGNetworkAndProxyInfo">Список прокси, ротация и журнал подключений</string>
+
+    <!-- Ghost -->
+    <string name="DDGAntiRecall">Защита от удаления</string>
+    <string name="DDGSaveDeletedMessages">Сохранять удалённые сообщения</string>
+    <string name="DDGSaveEditsHistory">История изменений сообщений</string>
+    <string name="DDGViewOnceUnlimited">Одноразовые без ограничений</string>
+    <string name="DDGViewOnceUnlimitedInfo">Открытые одноразовые медиа не закрываются сами, и каждый открытый файл сохраняется в приватной папке приложения — сгоревшее медиа снова открывается из этой копии. Медиа, которое вы не открыли, пока оно было живо, восстановить нельзя: сервер его уже стёр</string>
+    <string name="DDGMonetNeedsAndroid12">Тема Monet и её акцент доступны только на Android 12 и новее</string>
+
+    <!-- Monet -->
+    
+    <string name="DDGMonetCustomAccent">Свой цвет акцента</string>
+    <string name="DDGMonetNeedsTheme">Выберите тему Monet (светлая, тёмная или AMOLED), чтобы задать свой акцент</string>
+    <string name="DDGMonetAccentColor">Цвет акцента</string>
+    <string name="DDGMonetAccentPick">Выбрать цвет акцента</string>
+    <string name="DDGMonetAccentReset">Сбросить цвет акцента</string>
+
+    <!-- Plugins -->
+    <string name="DDGCompatibilityMode">Режим совместимости</string>
+    <string name="DDGCompatibilityModeInfo">Всегда получать код входа по SMS</string>
+    <string name="DDGToggleOn">Вкл.</string>
+    <string name="DDGToggleOff">Выкл.</string>
+    <string name="DDGSafeModeHint">Безопасный режим включён, потому что плагин несколько раз упал.</string>
+
+    <!-- Supporters -->
+    <string name="DDGSupporterBadge">Бейдж поддержавшего рядом с именем</string>
+    <string name="DDGSupporterBadgeInfo">Показывать сердечко рядом с теми, кто поддерживает проект</string>
+    <string name="DDGSupportersList">Поддержавшие</string>
+    <string name="DDGSupportersListInfo">Все, кто поддержал проект</string>
+    <string name="DDGSupportersEmpty">Пока никого</string>
+    <string name="DDGSupporterAnonymous">Поддержавший</string>
+    <string name="DDGBadgeShop">Получить бейдж</string>
+    <string name="DDGBadgeShopInfo">Купить бейдж за звёзды через @DDG_Badgesbot</string>
+    <string name="DDGBadgePrice">Цена</string>
+    <string name="DDGBadgeOwned">Уже куплен</string>
+    <string name="DDGBadgeOpenBot">Открыть @DDG_Badgesbot</string>
+    <string name="DDGSupporterBadgeBulletin">Этот человек поддержал DuckDuckGram</string>
+
+    <string name="DDGCopyLogsHeader">Логи</string>
+    <string name="DDGCopyLogs">Копировать логи</string>
+    <string name="DDGCopyLogsInfo">Копирует свежие логи приложения в буфер обмена. Прикладывайте их, сообщая об ошибке.</string>
+    <string name="DDGCopyLogsDone">Логи скопированы</string>
+    <string name="DDGSupporterBadgeOpenBot">Поддержать</string>
+
+    <!-- Login -->
+    <string name="DDGLoginAsBot">Вход как бот</string>
+    <string name="DDGLoginAsBotInfo">Вставьте токен бота, чтобы войти через бот-аккаунт</string>
+    <string name="DDGBotToken">Токен бота</string>
+    <string name="DDGTestBackend">Тестовый сервер</string>
+    <string name="DDGTestBackendInfo">Использовать тестовые серверы Telegram</string>
+    <string name="DDGTestBackendWarning">Тестовые серверы не покрываются никакими гарантиями приватности.</string>
+
+    <!-- About -->
+    <string name="DDGAboutVersion">Версия %1$s</string>
+    <string name="DDGSourceCode">Исходный код</string>
+    <string name="DDGChannel">Канал</string>
+    <string name="DDGDonateBot">Бот для донатов</string>
+    <string name="DDGCredits">Создано на базе DuckDuckGram, NagramX и Telegram Android</string>
+    <string name="DDGBotTokenHint">Возьмите токен у @BotFather и вставьте его сюда. После успешного входа перезапустите приложение, чтобы новая сессия подхватилась.</string>
+    <string name="DDGLoginError">Не удалось войти</string>
+    <string name="DDGBotLoginSuccess">Вы вошли как бот. Перезапустите приложение, чтобы новый аккаунт появился.</string>
+    <string name="DDGSettingsInfo">Категории, функции, плагины и бейджи поддержавших</string>
+    <string name="DDGSaveTrafficInfo">Предпросмотр медиа в списке чатов — главный потребитель трафика в мобильной сети. Отключённые превью держат список тихим, пока вы не откроете чат</string>
+    <string name="DDGGhostInDrawer">Показывать режим «Призрака» в боковом меню</string>
+    <string name="DDGGhostStatus">Показывать статус режима «Призрака»</string>
+    <string name="UnreadBadgeOnBackButton">Счётчик непрочитанных на кнопке «Назад»</string>
+    <string name="EnhancedFileLoader">Улучшенный загрузчик файлов</string>
+    <string name="UploadBoost">Ускорение выгрузки</string>
+    <string name="ShowTranslateMessageLLM">Переводить сообщения с помощью ИИ</string>
+    <string name="UseCustomEmoji">Использовать свои эмодзи</string>
+    <string name="ShowTextMono">Моноширинный</string>
+    <string name="ShowTextQuote">Цитата</string>
+    <string name="ShowTextSpoiler">Спойлер</string>
+    <string name="DDGChatExportTitle">Экспорт чата</string>
+    <string name="DDGChatExportInfo">Выберите чат, и DuckDuckGram запишет его локальную историю в Markdown: текст сообщений с форматированием, авторов, время и таблицу вложений с именами, размерами и признаком того, есть ли файл уже на устройстве. Сами медиафайлы не копируются, поэтому экспорт не дублирует гигабайты из кэша Telegram. Файл попадает в папку ddg_export внутри каталога внешних файлов приложения и сразу предлагается отправить. В списке только недавние чаты</string>
+    <string name="DDGChatExportHeader">Недавние чаты</string>
+    <string name="DDGChatExportNoChats">Чаты не найдены</string>
+    <string name="DDGChatExportBusy">Экспорт уже выполняется</string>
+    <string name="DDGChatExportEmpty">В этом чате нет сообщений в локальной базе</string>
+    <string name="DDGChatExportFailed">Не удалось экспортировать, смотрите лог</string>
+    <string name="DDGChatExportDone">%1$s: сообщений — %2$d, вложений — %3$d</string>
+    <string name="DDGChatExportStamp">Экспортировано: %1$s</string>
+    <string name="DDGChatExportMessages">Сообщений: %1$d</string>
+    <string name="DDGChatExportMediaItems">Медиа: %1$d</string>
+    <string name="DDGChatExportPeriod">Период: %1$s — %2$s</string>
+    <string name="DDGChatExportTruncated">Включены только первые %1$d сообщений</string>
+    <string name="DDGChatExportNoMedia">В этом чате нет вложений.</string>
+    <string name="DDGChatExportMediaTitle">## Медиа (%1$d)</string>
+    <string name="DDGChatExportTableHeader">| Время | От | Тип | Файл | Размер | На устройстве |\n| --- | --- | --- | --- | --- | --- |</string>
+    <string name="DDGChatExportMediaNote">Файлы не копируются: указаны только имена, размеры и наличие. Telegram хранит скачанные файлы в своей папке; экспорт их не трогает.</string>
+    <string name="DDGChatExportScopeNote">Не включено: сами медиафайлы (см. таблицу в конце) и история, не хранившаяся на этом устройстве. Этот файл отражает только локальную базу.</string>
+
+    <string name="DDGHideInterfaceExtra">Скрыть лишнее</string>
+    <string name="DDGDisableShortcutTagActions">Скрыть быстрые теги</string>
+    <string name="DDGDisableShortcutTagActionsInfo">После пересылки сообщений в «Избранное» Telegram предлагает панель тегов в один тап. Скрыть её.</string>
+    <string name="DDGHidePhotoCounter">Скрывать счётчик фото</string>
+    <string name="DDGHidePhotoCounterInfo">Скрывает счётчик фото вверху просмотрщика.</string>
+    <string name="DDGDisableGifts">Скрывать подарки</string>
+    <string name="DDGDisableGiftsInfo">Убирает строку подарков из профиля, вкладку подарков из раздела медиа и счётчики подарков.</string>
+    <string name="DDGDisableAds">Скрывать рекламу</string>
+    <string name="DDGDisableAdsInfo">Скрывает промо-баннеры, которые Telegram присылает на ваш аккаунт. Спонсорские сообщения и так блокируются приложением, и эта настройка на них не влияет.</string>
+    <string name="DDGDisablePhoneSharePrompt">Скрыть «поделиться номером»</string>
+    <string name="DDGDisablePhoneSharePromptInfo">Убирает панель с предложением поделиться своим номером телефона с пользователем.</string>
+    <string name="DDGDisableBirthdayContact">Скрыть подсказку о дне рождения</string>
+    <string name="DDGDisableBirthdayContactInfo">Скрывает предложение отправить подарок контактам, у которых сегодня день рождения.</string>
+
+    <string name="DDGHidePremiumNags">Скрыть напоминания о Premium</string>
+    <string name="DDGDisableNonPremiumChannelChatShow">Скрыть Premium-каналы в «Отправить как»</string>
+    <string name="DDGDisableNonPremiumChannelChatShowInfo">Каналы, от имени которых можно писать только с подпиской, исчезают из меню «Отправить как», вместо того чтобы быть серыми.</string>
+    <string name="DDGDisableFavoriteSearchEmojiTags">Скрыть избранные реакции в поиске «Избранного»</string>
+    <string name="DDGDisableFavoriteSearchEmojiTagsInfo">Убирает строку избранных реакций над полем поиска — и в «Избранном», и в вашем профиле. Переоткройте «Избранное», чтобы применилось.</string>
+    <string name="DDGDisablePremiumFavoriteEmojiTags">Скрыть избранные реакции в меню реакций</string>
+    <string name="DDGDisablePremiumFavoriteEmojiTagsInfo">Убирает избранный набор из меню реакций на сообщении. Обычный список реакций не меняется.</string>
+    <string name="DDGDisablePremiumSendTodo">Скрыть «Создать задачу» для бесплатных аккаунтов</string>
+    <string name="DDGDisablePremiumSendTodoInfo">Пункт задач исчезает из меню вложений, когда подписки нет. После подписки ничего не меняется.</string>
+
+    <!-- Local profile -->
+    <string name="DDGProfileInfo">Меняется только на этом устройстве и только для отображения. На сервер ничего не отправляется, а выход из аккаунта возвращает настоящие значения.</string>
+    <string name="DDGProfilePhone">Номер телефона</string>
+    <string name="DDGProfileUsername">Юзернейм</string>
+    <string name="DDGProfileUserId">ID аккаунта</string>
+    <string name="DDGProfileNotSet">Не задано</string>
+    <string name="DDGProfileReset">Сбросить локальный профиль</string>
+    <string name="DDGProfileResetInfo">Очищает локальный телефон, юзернейм и ID и снова показывает настоящий профиль.</string>
+    <string name="DDGProfilePhoneHint">например +7 555 000 00 00</string>
+    <string name="DDGProfileUsernameHint">без @</string>
+    <string name="DDGProfileUserIdHint">только цифры</string>
+    <string name="DDGProfileSaved">Сохранено</string>
+    <string name="DDGProfileResetDone">Локальный профиль сброшен</string>
+
+    <!-- Settings backup -->
+    <string name="DDGSettingsExport">Экспорт настроек</string>
+    <string name="DDGSettingsImport">Импорт настроек</string>
+
+    <!-- Read all -->
+    <string name="DDGReadAll">Прочитать все чаты</string>
+    <string name="DDGReadAllDone">Все чаты отмечены прочитанными</string>
+
+    <string name="DDGCategoryForkLinks">От форка</string>
+    <string name="DDGSettingBackup">Резервная копия и импорт настроек</string>
+    <string name="DDGAppIcons">Значки приложения</string>
+    <string name="DDGNoFolders">У вас пока нет папок с чатами.</string>
+
+    <!-- AyuMoments (ported from NagramXF) -->
+    <string name="AyuMoments">AyuMoments</string>
+    <string name="AyuMomentsCustomHeader">Своё</string>
+    <string name="AyuSpySettings">Настройки шпиона</string>
+    <string name="AyuMomentsPreviewMessage">Делай что можешь, а остальное предоставь судьбе</string>
+    <string name="DeletedMarkText">Метка удаления</string>
+    <string name="DeletedMarkNothing">Ничего</string>
+    <string name="DeletedMarkTrashBin">Корзина</string>
+    <string name="DeletedMarkCross">Крестик</string>
+    <string name="DeletedMarkEyeCrossed">Перечёркнутый глаз</string>
+    <string name="DisableAds">Отключить рекламу</string>
+</resources>

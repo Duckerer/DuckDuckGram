@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- DuckDuckGram: собственные строки клиента. Ключи с префиксом DDG. -->
+<resources>
+    <string name="DuckDuckGram" translatable="false">DuckDuckGram</string>
+    <string name="DuckDuckGramPreferences">DuckDuckGram Preferences</string>
+    <string name="DuckDuckGramPreferencesInfo">Privacy-first Telegram client</string>
+
+    <string name="DDGCategoryChats">Chats</string>
+    <string name="DDGCategoryMedia">Media</string>
+    <string name="DDGCategoryInterface">Interface</string>
+    <string name="DDGCategoryAvatars">Avatars and folders</string>
+    <string name="DDGCategoryPrivacy">Privacy screen</string>
+    <string name="DDGCategoryTypography">Typography</string>
+    <string name="DDGCategoryTranslate">Translation</string>
+    <string name="DDGCategoryStorage">Storage and network</string>
+    <string name="DDGCategoryGhost">Ghost mode</string>
+    <string name="DDGCategoryAyuMoments">AyuMoments</string>
+    <string name="DDGCategoryMonet">Monet theme</string>
+    <string name="DDGCategoryAppearance">Appearance</string>
+    <string name="DDGCategoryPlugins">Plugins</string>
+    <string name="DDGCategoryJavaPlugins">Java plugins</string>
+    <string name="DDGCategoryProfile">Local profile</string>
+    <string name="DDGCategorySupporters">Supporters</string>
+    <string name="DDGCategoryLogin">Login</string>
+    <string name="DDGCategoryOther">Other</string>
+    <string name="DDGCategoryDonate">Donate</string>
+
+    <!-- Chats -->
+    <string name="DDGConfirmSend">Confirm before sending</string>
+    <string name="DDGConfirmSendInfo">Ask before a message leaves the input field</string>
+    <string name="DDGConfirmSendTitle">Send this?</string>
+    <string name="DDGConfirmSendMessage">Send this message?</string>
+    <string name="DDGConfirmSendStickerMessage">Send this sticker?</string>
+    <string name="DDGConfirmSendGifMessage">Send this GIF?</string>
+    <string name="DDGConfirmSendPhotoTitle">Send this photo?</string>
+    <string name="DDGConfirmSendVideoTitle">Send this video?</string>
+    <string name="DDGConfirmSendMediaTitleMultiple">Send %1$d files?</string>
+    <string name="DDGConfirmSendMediaMessage">They will be sent as they are and cannot be taken back</string>
+    <string name="DDGDisableBigEmoji">Disable big emoji</string>
+    <string name="DDGCommaAfterMention">Add a comma after @mentions</string>
+    <string name="DDGSecondsInClock">Show seconds in the clock</string>
+    <string name="DDGDeleteForEveryoneDefault">\"Delete for everyone\" by default</string>
+    <string name="DDGQuickDuplicate">Quick duplicate message</string>
+    <string name="DDGQuickDuplicateInfo">Swipe a message to duplicate it</string>
+    <string name="DDGDoubleTapReaction">Reaction on double tap</string>
+    <string name="DDGDoubleTapReactionNone">Off</string>
+    <string name="DDGDoubleTapReactionLike">Like</string>
+    <string name="DDGDoubleTapReactionDislike">Dislike</string>
+    <string name="DDGDoubleTapReactionWow">Wow</string>
+    <string name="DDGDoubleTapReactionHeart">Heart</string>
+    <string name="DDGDoubleTapReactionFire">Fire</string>
+    <string name="DDGDoubleTapReactionParty">Party</string>
+    <string name="DDGSendOnlyOnline">Send only to online users</string>
+    <string name="DDGSendOnlyOnlineInfo">Hold the message until the recipient comes online</string>
+    <string name="DDGSendOnlyOnlineHeld">Message queued, will be sent when %1$s comes online</string>
+    <string name="DDGMillisecondTimestamp">Precise timestamp with milliseconds</string>
+    <string name="DDGOriginalDateOnForward">Original date on forwarded messages</string>
+    <string name="DDGJumpToFirstMessage">Jump to first message</string>
+    <string name="DDGJumpToFirstMessageInfo">Adds a jump-to-top item to the chat menu</string>
+    <string name="DDGHighlightAllChats">Highlight all chats</string>
+    <string name="DDGMessageFilter">Message filter and anti-spam</string>
+    <string name="DDGMessageFilterInfo">Keywords to hide, per chat</string>
+    <string name="DDGMessageFilterKeywords">Blocked keywords</string>
+    <string name="DDGMessageFilterHint">One keyword per line</string>
+    <string name="DDGMessageFilterEmpty">No keywords yet</string>
+    <string name="DDGBubbleDesign">Bubble design</string>
+    <string name="DDGBubbleDesignDefault">Default</string>
+    <string name="DDGBubbleDesignCompact">Compact</string>
+    <string name="DDGBubbleDesignLarge">Large</string>
+    <string name="DDGQuickShareMedia">Quick share to a chat</string>
+    <string name="DDGQuickShareMediaInfo">Hold a message bubble and the recent chats open on top of it, so a copy of the message goes to the chosen chat right away. The button was already in the fork but always on, now it is behind this switch</string>
+    <string name="DDGForwardWithoutQuote">Forward without quote</string>
+    <string name="DDGDisableLinkPreview">Disable link previews</string>
+    <string name="DDGForceCopy">Force copy</string>
+    <string name="DDGForceCopyInfo">Treat every input as a copy-paste, no formatting toolbar</string>
+    <string name="DDGSkipUndoTimer">Skip undo timer</string>
+    <string name="DDGQuickReplyLongPress">Quick reply on long press</string>
+    <string name="DDGKeepOriginalFileNames">Keep original file names</string>
+    <string name="DDGHideMessageTime">Hide time in messages</string>
+    <string name="DDGHideMessageTimeInfo">Removes the timestamp inside message bubbles. Read receipts stay visible.</string>
+
+    <!-- Media -->
+    <string name="DDGRestyledPlayer">Restyled audio player</string>
+    <string name="DDGRestyledPlayerInfo">In the in-chat player: the progress bar gets a dimmed accent track behind it so the whole scale is visible, and the bar itself gets thinner</string>
+    <string name="DDGRearCameraPriority">Rear camera priority for video</string>
+    <string name="DDGNoiseSuppression">Noise suppression on voice messages</string>
+    <string name="DDGStickerSize">Sticker size</string>
+    <string name="DDGStickerSizeSmall">Small</string>
+    <string name="DDGStickerSizeNormal">Normal</string>
+    <string name="DDGStickerSizeLarge">Large</string>
+    <string name="DDGVoiceToTextAI">Voice-to-text with AI</string>
+    <string name="DDGVoiceToTextProvider">AI provider</string>
+    <string name="DDGApiKey">API key</string>
+    <string name="DDGApiKeyHint">Your own key, stored on device only</string>
+    <string name="DDGApiKeyMissing">API key is not set</string>
+
+    <!-- Interface -->
+    <string name="DDGCompactSidebar">Compact sidebar</string>
+    <string name="DDGCompactSidebarInfo">Shorter menu items, lower header and account rows, so more of the menu fits on screen without scrolling</string>
+    <string name="DDGHideComposeIcon">Hide the compose icon</string>
+    <string name="DDGMenuStyles">Menu styles</string>
+    <string name="DDGMenuStyleDefault">Default</string>
+    <string name="DDGMenuStyleCompact">Compact</string>
+    <string name="DDGMenuStyleList">List</string>
+    <string name="DDGSidebarEditor">Sidebar editor</string>
+    <string name="DDGSidebarEditorInfo">Reorder and hide sidebar items</string>
+    <string name="DDGStickerPackMenu">Improved sticker pack menu</string>
+    <string name="DDGBuiltInBrowser">Built-in browser</string>
+    <string name="DDGBuiltInBrowserInfo">Open links in the app instead of the system browser</string>
+    <string name="DDGForbidChannelSwitch">Forbid switching channels</string>
+    <string name="DDGMutualContacts">Open mutual contacts list</string>
+    <string name="DDGMutualContactsInfo">Tap the mutual icon in contacts to see who you have in common</string>
+    <string name="DDGMutualContactsTitle">Mutual contacts</string>
+    <string name="DDGUnreadMutesAbovePins">Unread mutes above pinned chats</string>
+    <string name="DDGUnlimitedPinnedChats">Unlimited pinned chats</string>
+    <string name="DDGHideAllStories">Hide all stories</string>
+    <string name="DDGMergeMessages">Merge messages</string>
+    <string name="DDGDisableVibration">Disable vibration</string>
+    <string name="DDGDisableTrends">Disable trends</string>
+    <string name="DDGUnlimitedAccounts">Unlimited accounts</string>
+
+    <!-- Avatars and folders -->
+    <string name="DDGAvatarInHeader">Avatar always in the chat header</string>
+    <string name="DDGUnlimitedFolders">Unlimited folders</string>
+    <string name="DDGMoveAllChatsToFolder">Move all chats to a folder</string>
+    <string name="DDGMoveAllChatsToFolderInfo">Bulk-assign every chat to one folder</string>
+
+    <!-- Privacy -->
+    <string name="DDGPrivacyScreen">Privacy screen in the app switcher</string>
+    <string name="DDGPrivacyScreenInfo">Keeps the app window out of screenshots while it is in the background, so the task switcher preview stays blank. Screenshots are available again once you return to Telegram</string>
+    <string name="DDGHideAvatarsInList">Hide avatars in the chat list</string>
+    <string name="DDGHideStickerInfoOnPhotos">Hide sticker info on photos</string>
+
+    <!-- Streamer mode -->
+    <string name="DDGStreamerMode">Streamer mode</string>
+    <string name="DDGStreamerModeInfo">While it is on, the chat list shows no message previews and notifications carry no text, no media thumbnail and no avatar. Phone numbers, usernames and IDs are hidden on profiles too. Chat names, timestamps and counters stay visible, and anything you have already opened stays on screen — close the privacy screen option for that</string>
+    <string name="DDGEnableStreamerMode">Turn on streamer mode</string>
+    <string name="DDGDisableStreamerMode">Turn off streamer mode</string>
+    <string name="DDGStreamerModeEnabled">Streamer mode is on</string>
+    <string name="DDGStreamerModeDisabled">Streamer mode is off</string>
+    <string name="DDGMessageHidden">Message hidden</string>
+    <string name="DDGStreamerModeHidden">Hidden</string>
+
+    <!-- Typography -->
+    <string name="DDGSystemFont">System font</string>
+    <string name="DDGSystemFontInfo">Ignore bundled and custom fonts</string>
+    <string name="DDGCustomFont">Custom font</string>
+    <string name="DDGCustomFontHint">Pick a .ttf or .otf file</string>
+    <string name="DDGCustomFontRestartInfo">Applied on next app start, same as the system font setting. Monospace text keeps its own font</string>
+    <string name="DDGCustomFontReset">Reset custom font</string>
+    <string name="DDGTextStyleEditor">Editable text style</string>
+    <string name="DDGTextStyleEditorInfo">Tune size, line spacing and weight</string>
+    <string name="DDGTextSize">Text size</string>
+    <string name="DDGLineSpacing">Line spacing</string>
+    <string name="DDGTextSizeScaleInfo">Multiplier on top of the size set in Appearance</string>
+    <string name="DDGScale80" translatable="false">80%</string>
+    <string name="DDGScale90" translatable="false">90%</string>
+    <string name="DDGScale100" translatable="false">100%</string>
+    <string name="DDGScale110" translatable="false">110%</string>
+    <string name="DDGScale125" translatable="false">125%</string>
+    <string name="DDGSpacingTight">Tight</string>
+    <string name="DDGSpacingNormal">Normal</string>
+    <string name="DDGSpacingRoomy">Roomy</string>
+    <string name="DDGSpacingLoose">Loose</string>
+
+    <!-- Translation -->
+    <string name="DDGRealtimeTranslation">Real-time chat translation</string>
+    <string name="DDGRealtimeTranslationInfo">Translate incoming messages as they arrive</string>
+    <string name="DDGTranslationTargetLanguage">Target language</string>
+    <string name="DDGTranslationTargetAuto">Same as Telegram language</string>
+
+    <!-- Storage and network -->
+    <string name="DDGCustomSavePath">Custom save path</string>
+    <string name="DDGCustomSavePathInfo">Where photos, videos and voice notes are written</string>
+    <string name="DDGNetworkAndProxy">Network and proxy</string>
+    <string name="DDGNetworkAndProxyInfo">Proxy list, rotation and connection log</string>
+
+    <!-- Ghost -->
+    <string name="DDGAntiRecall">Anti-recall</string>
+    <string name="DDGSaveDeletedMessages">Save deleted messages</string>
+    <string name="DDGSaveEditsHistory">Message edit history</string>
+    <string name="DDGViewOnceUnlimited">View-once without limits</string>
+    <string name="DDGViewOnceUnlimitedInfo">Opened view-once media does not close on its own, and every opened file is kept in the app\'s private folder — burnt media opens again from that copy. Media you never opened while it was alive cannot be recovered: the server has already erased it</string>
+    <string name="DDGMonetNeedsAndroid12">Monet theme and its accent are available on Android 12 and newer only</string>
+
+    <!-- Monet -->
+    
+    <string name="DDGMonetCustomAccent">Custom accent color</string>
+    <string name="DDGMonetNeedsTheme">Pick a Monet theme (Light, Dark or AMOLED) to use a custom accent</string>
+    <string name="DDGMonetAccentColor">Accent color</string>
+    <string name="DDGMonetAccentPick">Pick accent color</string>
+    <string name="DDGMonetAccentReset">Reset accent color</string>
+
+    <!-- Plugins -->
+    <string name="DDGCompatibilityMode">Compatibility mode</string>
+    <string name="DDGCompatibilityModeInfo">Always receive the login code by SMS</string>
+    <string name="DDGToggleOn">On</string>
+    <string name="DDGToggleOff">Off</string>
+    <string name="DDGSafeModeHint">Safe mode is on because a plugin crashed repeatedly.</string>
+
+    <!-- Supporters -->
+    <string name="DDGSupporterBadge">Supporter badge next to the name</string>
+    <string name="DDGSupporterBadgeInfo">Show a heart next to people who support the project</string>
+    <string name="DDGSupportersList">Supporters</string>
+    <string name="DDGSupportersListInfo">Everyone who backed the project</string>
+    <string name="DDGSupportersEmpty">No supporters yet</string>
+    <string name="DDGSupporterAnonymous">Supporter</string>
+    <string name="DDGBadgeShop">Get a badge</string>
+    <string name="DDGBadgeShopInfo">Buy a badge for Stars through @DDG_Badgesbot</string>
+    <string name="DDGBadgePrice">Price</string>
+    <string name="DDGBadgeOwned">Already purchased</string>
+    <string name="DDGBadgeOpenBot">Open @DDG_Badgesbot</string>
+    <string name="DDGSupporterBadgeBulletin">This person supported DuckDuckGram</string>
+
+    <string name="DDGCopyLogsHeader">Logs</string>
+    <string name="DDGCopyLogs">Copy logs</string>
+    <string name="DDGCopyLogsInfo">Copies the newest app logs to the clipboard. Attach them when reporting a bug.</string>
+    <string name="DDGCopyLogsDone">Logs copied</string>
+    <string name="DDGSupporterBadgeOpenBot">Support</string>
+
+    <!-- Login -->
+    <string name="DDGLoginAsBot">Log in as a bot</string>
+    <string name="DDGLoginAsBotInfo">Paste a bot token to sign in through a bot account</string>
+    <string name="DDGBotToken">Bot token</string>
+    <string name="DDGTestBackend">Test backend</string>
+    <string name="DDGTestBackendInfo">Use Telegram test servers</string>
+    <string name="DDGTestBackendWarning">Test servers are not covered by any privacy guarantee.</string>
+
+    <!-- About -->
+    <string name="DDGAboutVersion">Version %1$s</string>
+    <string name="DDGSourceCode">Source code</string>
+    <string name="DDGChannel">Channel</string>
+    <string name="DDGDonateBot">Donate bot</string>
+    <string name="DDGCredits">Built on DuckDuckGram, NagramX and Telegram Android</string>
+    <string name="DDGBotTokenHint">Get the token from @BotFather and paste it here. After a successful login, restart the app so the new session is picked up.</string>
+    <string name="DDGLoginError">Login failed</string>
+    <string name="DDGBotLoginSuccess">Logged in as a bot. Restart the app to pick up the new account.</string>
+    <string name="DDGSettingsInfo">Categories, features, plugins and supporter badges</string>
+    <string name="DDGSaveTrafficInfo">Chat list media previews are the main consumer of traffic on mobile data. Turning previews off keeps the list quiet until you open the chat</string>
+    <string name="DDGGhostInDrawer">Show ghost mode in the drawer</string>
+    <string name="DDGGhostStatus">Show ghost mode status</string>
+    <string name="UnreadBadgeOnBackButton">Unread counter on the back button</string>
+    <string name="EnhancedFileLoader">Enhanced file loader</string>
+    <string name="UploadBoost">Upload speed boost</string>
+    <string name="ShowTranslateMessageLLM">Translate messages with LLM</string>
+    <string name="UseCustomEmoji">Use custom emoji</string>
+    <string name="ShowTextMono">Monospace</string>
+    <string name="ShowTextQuote">Quote</string>
+    <string name="ShowTextSpoiler">Spoiler</string>
+    <string name="DDGChatExportTitle">Chat export</string>
+    <string name="DDGChatExportInfo">Pick a chat and DuckDuckGram writes its local history as Markdown: message text with formatting, authors, timestamps, and a table of attachments with names, sizes and whether the file is already on the device. Media files themselves are not copied, so the export never duplicates gigabytes out of the Telegram cache. The file goes to the ddg_export folder inside the app external files directory and is offered to share straight away. Only recent chats are listed</string>
+    <string name="DDGChatExportHeader">Recent chats</string>
+    <string name="DDGChatExportNoChats">No chats found</string>
+    <string name="DDGChatExportBusy">An export is already running</string>
+    <string name="DDGChatExportEmpty">This chat has no messages in the local database</string>
+    <string name="DDGChatExportFailed">Export failed, see the log</string>
+    <string name="DDGChatExportDone">%1$s: %2$d messages, %3$d attachments</string>
+    <string name="DDGChatExportStamp">Exported: %1$s</string>
+    <string name="DDGChatExportMessages">Messages: %1$d</string>
+    <string name="DDGChatExportMediaItems">Media items: %1$d</string>
+    <string name="DDGChatExportPeriod">Period: %1$s - %2$s</string>
+    <string name="DDGChatExportTruncated">Only the first %1$d messages are included</string>
+    <string name="DDGChatExportNoMedia">This chat has no attachments.</string>
+    <string name="DDGChatExportMediaTitle">## Media (%1$d)</string>
+    <string name="DDGChatExportTableHeader">| Time | From | Kind | File | Size | On device |\n| --- | --- | --- | --- | --- | --- |</string>
+    <string name="DDGChatExportMediaNote">Files are not copied: only names, sizes and availability are listed. Telegram keeps downloaded files in its own folder; the export does not touch them.</string>
+    <string name="DDGChatExportScopeNote">Not included: the media files themselves (see the table at the end) and any history that was not stored on this device. This file reflects the local database only.</string>
+
+    <string name="DDGHideInterfaceExtra">Hide extra</string>
+    <string name="DDGDisableShortcutTagActions">Hide quick tag actions</string>
+    <string name="DDGDisableShortcutTagActionsInfo">After forwarding messages to Saved Messages, Telegram offers a panel of one-tap tags. Hide it.</string>
+    <string name="DDGHidePhotoCounter">Hide photo counter</string>
+    <string name="DDGHidePhotoCounterInfo">Hides the photo counter at the top of the viewer.</string>
+    <string name="DDGDisableGifts">Hide gifts</string>
+    <string name="DDGDisableGiftsInfo">Removes the gifts row from the profile, the gifts tab from the media section, and the gift counters.</string>
+    <string name="DDGDisableAds">Hide ads</string>
+    <string name="DDGDisableAdsInfo">Hides the promo banners Telegram sends to your account. Sponsored messages are already blocked by the app and are not affected by this setting.</string>
+    <string name="DDGDisablePhoneSharePrompt">Hide "share my phone" prompt</string>
+    <string name="DDGDisablePhoneSharePromptInfo">Removes the bar offering to share your phone number with a user.</string>
+    <string name="DDGDisableBirthdayContact">Hide birthday hint</string>
+    <string name="DDGDisableBirthdayContactInfo">Hides the suggestion to send a gift to contacts with a birthday today.</string>
+
+    <string name="DDGHidePremiumNags">Hide premium nudges</string>
+    <string name="DDGDisableNonPremiumChannelChatShow">Hide premium-only channels in "send as"</string>
+    <string name="DDGDisableNonPremiumChannelChatShowInfo">Channels you can post as only with a subscription disappear from the send-as menu instead of being greyed out.</string>
+    <string name="DDGDisableFavoriteSearchEmojiTags">Hide favourite reactions in Saved Messages search</string>
+    <string name="DDGDisableFavoriteSearchEmojiTagsInfo">Removes the row of favourite reactions above the search field, both in Saved Messages and in your profile. Reopen Saved Messages for it to take effect.</string>
+    <string name="DDGDisablePremiumFavoriteEmojiTags">Hide favourite reactions in the reaction menu</string>
+    <string name="DDGDisablePremiumFavoriteEmojiTagsInfo">Removes the favourite set from the message reaction menu. The regular reaction list is unaffected.</string>
+    <string name="DDGDisablePremiumSendTodo">Hide "create task" for free accounts</string>
+    <string name="DDGDisablePremiumSendTodoInfo">The task entry disappears from the attach menu when you have no subscription. Nothing changes once you subscribe.</string>
+
+    <!-- Local profile -->
+    <string name="DDGProfileInfo">Changed on this device only and only for display. Nothing is sent to the server, and signing out restores the real values.</string>
+    <string name="DDGProfilePhone">Phone number</string>
+    <string name="DDGProfileUsername">Username</string>
+    <string name="DDGProfileUserId">Account ID</string>
+    <string name="DDGProfileNotSet">Not set</string>
+    <string name="DDGProfileReset">Reset local profile</string>
+    <string name="DDGProfileResetInfo">Clears the local phone, username and ID, and shows the real profile again.</string>
+    <string name="DDGProfilePhoneHint">e.g. +1 555 000 0000</string>
+    <string name="DDGProfileUsernameHint">without @</string>
+    <string name="DDGProfileUserIdHint">digits only</string>
+    <string name="DDGProfileSaved">Saved</string>
+    <string name="DDGProfileResetDone">Local profile reset</string>
+
+    <!-- Settings backup -->
+    <string name="DDGSettingsExport">Export settings</string>
+    <string name="DDGSettingsImport">Import settings</string>
+
+    <!-- Read all -->
+    <string name="DDGReadAll">Read all chats</string>
+    <string name="DDGReadAllDone">All chats are marked as read</string>
+
+    <string name="DDGCategoryForkLinks">From the fork</string>
+    <string name="DDGSettingBackup">Settings backup and import</string>
+    <string name="DDGAppIcons">App icons</string>
+    <string name="DDGNoFolders">You don\'t have any chat folders yet.</string>
+
+    <!-- AyuMoments (ported from NagramXF) -->
+    <string name="AyuMoments">AyuMoments</string>
+    <string name="AyuMomentsCustomHeader">Custom</string>
+    <string name="AyuSpySettings">Spy Settings</string>
+    <string name="AyuMomentsPreviewMessage">Do your best, leave the rest to fate</string>
+    <string name="DeletedMarkText">Deleted Mark</string>
+    <string name="DeletedMarkNothing">Nothing</string>
+    <string name="DeletedMarkTrashBin">Trash Bin</string>
+    <string name="DeletedMarkCross">Cross</string>
+    <string name="DeletedMarkEyeCrossed">Eye Crossed</string>
+    <string name="DisableAds">Disable Ads</string>
+</resources>
