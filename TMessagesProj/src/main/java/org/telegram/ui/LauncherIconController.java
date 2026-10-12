@@ -42,8 +42,8 @@ public class LauncherIconController {
         // в манифесте, поэтому в переключателе стоит первой и выбрана по умолчанию.
         DUCKDUCKGRAM("DuckDuckGramIcon", R.drawable.duckduckgram_icon_background,
                 R.drawable.duckduckgram_icon_foreground, R.string.AppIconDuckDuckGram),
-        EXTERALESS("ExteralessIcon", R.drawable.exteraless_icon_background,
-                R.drawable.exteraless_icon_foreground, R.string.AppIconExteraless),
+        EXTERALESS("ExteralessIcon", R.drawable.duckduckgram_icon_background,
+                R.drawable.duckduckgram_icon_foreground, R.string.AppIconExteraless),
         BLUEPRINT("BlueprintIcon", R.drawable.blueprint_icon_background,
                 R.drawable.blueprint_icon_foreground, R.string.AppIconBlueprint),
         RED("RedIcon", R.drawable.red_icon_background,

@@ -482,7 +482,7 @@ public final class GlyphController {
         if (matrixLogoBitmap != null) {
             return matrixLogoBitmap;
         }
-        Drawable icon = context.getDrawable(R.drawable.exteraless_icon_monochrome);
+        Drawable icon = context.getDrawable(R.drawable.duckduckgram_icon_monochrome);
         if (icon == null) {
             return null;
         }

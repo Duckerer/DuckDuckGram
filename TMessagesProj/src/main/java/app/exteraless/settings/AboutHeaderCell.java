@@ -65,7 +65,7 @@ public class AboutHeaderCell extends LinearLayout {
         };
         logo.setScaleType(ImageView.ScaleType.CENTER_CROP);
         logo.setBackgroundColor(LOGO_BACKGROUND);
-        logo.setImageResource(R.drawable.exteraless_icon);
+        logo.setImageResource(R.drawable.duckduckgram_icon);
         logo.setOnLongClickListener(v -> {
             IconPacksConfig.toggleSystemIconShape();
             IconShapeHelper.invalidate();

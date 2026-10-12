@@ -783,7 +783,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
         // Как в exteraGram 12.9.0 (SettingsActivity.java:899): знак приложения вместо
         // шестерёнки, акцент фирменного цвета на обе точки градиента.
-        items.add(SettingCell.Factory.of(-1, 0xFF993C38, 0xFF993C38, R.drawable.exteraless_icon_tile, getString(R.string.OpenExteraPreferences), getString(R.string.OpenExteraInfo)));
+        items.add(SettingCell.Factory.of(-1, 0xFF993C38, 0xFF993C38, R.drawable.duckduckgram_icon_tile, getString(R.string.OpenExteraPreferences), getString(R.string.OpenExteraInfo)));
         // DuckDuckGram: собственный корень настроек поверх форка. Идёт первым,
         // потому что это лицо клиента, а список exteraless остаётся доступен ниже.
         items.add(SettingCell.Factory.of(102, 0xFF0048FF, 0xFF0048FF, R.drawable.duckduckgram_icon_tile, getString(R.string.DuckDuckGramPreferences), getString(R.string.DDGSettingsInfo)));

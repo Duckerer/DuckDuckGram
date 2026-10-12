@@ -165,7 +165,7 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
 
     @Override
     protected String getKey() {
-        return "exteraless";
+        return "duckduckgram";
     }
 
     @Override

@@ -1935,10 +1935,19 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                 }
 
                 if (!backAnimation) {
-                    getLastFragment().onTransitionAnimationProgress(false, progress);
-                    getBackgroundFragment().onTransitionAnimationProgress(true, progress);
+                    BaseFragment lastFragment = getLastFragment();
+                    if (lastFragment != null) {
+                        lastFragment.onTransitionAnimationProgress(false, progress);
+                    }
+                    BaseFragment backgroundFragment = getBackgroundFragment();
+                    if (backgroundFragment != null) {
+                        backgroundFragment.onTransitionAnimationProgress(true, progress);
+                    }
                 } else {
-                    getBackgroundFragment().onTransitionAnimationProgress(true, 1f - progress);
+                    BaseFragment backgroundFragment = getBackgroundFragment();
+                    if (backgroundFragment != null) {
+                        backgroundFragment.onTransitionAnimationProgress(true, 1f - progress);
+                    }
                 }
             });
             currentSpringAnimation.addEndListener((animation, canceled, value, velocity) -> {

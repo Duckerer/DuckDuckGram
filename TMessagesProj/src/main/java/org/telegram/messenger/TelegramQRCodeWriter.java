@@ -223,7 +223,7 @@ public final class TelegramQRCodeWriter {
             canvas.drawBitmap(icon, imageX, imageX, null);
             icon.recycle();
         } else {
-            Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.exteraless_icon);
+            Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.duckduckgram_icon);
             drawable.setBounds(imageX, imageX, imageX + imageSize, imageX + imageSize);
             drawable.draw(canvas);
         }
