@@ -101,10 +101,13 @@ public final class DdgProfileOverride {
 
         // Запоминаем настоящие значения до первой подмены — иначе сброс вернуть их
         // не сможет (после перезаписи объекта брать настоящее неоткуда).
-        RealValues real = realValues.get(currentAccount);
-        if (real == null) {
-            real = new RealValues(user.phone, user.username, (user.flags & 8) != 0);
-            realValues.put(currentAccount, real);
+        RealValues real;
+        synchronized (realValues) {
+            real = realValues.get(currentAccount);
+            if (real == null) {
+                real = new RealValues(user.phone, user.username, (user.flags & 8) != 0);
+                realValues.put(currentAccount, real);
+            }
         }
 
         if (hasPhone) {
@@ -167,14 +170,19 @@ public final class DdgProfileOverride {
     /**
      * Телефон для показа в шапках приложения (настройки, сайдбар).
      *
-     * <p>Локальная подмена выводится ровно как её ввели — без «+», который
-     * приложение приписывает настоящему номеру. Без подмены поведение прежнее.
+     * <p>Локальная подмена выводится только для текущего пользователя и ровно как её
+     * ввели — без «+», который приложение приписывает настоящему номеру. Для чужого
+     * профиля подмена не применяется: иначе номер из твоих настроек показывался бы
+     * на странице любого пользователя.
      */
-    public static String displayPhone(String realPhone) {
-        String local = DdgConfig.localPhone.String();
-        if (local != null && !local.trim().isEmpty()) {
-            return local.trim();
+    public static String displayPhone(TLRPC.User user) {
+        if (user != null && user.self) {
+            String local = DdgConfig.localPhone.String();
+            if (local != null && !local.trim().isEmpty()) {
+                return local.trim();
+            }
         }
+        String realPhone = user == null ? null : user.phone;
         return realPhone == null || realPhone.isEmpty()
                 ? "" : PhoneFormat.getInstance().format("+" + realPhone);
     }
@@ -192,8 +200,11 @@ public final class DdgProfileOverride {
             if (!UserConfig.isValidAccount(account)) {
                 continue;
             }
-            RealValues real = realValues.get(account);
+            RealValues real;
             TLRPC.User user = currentUser(account);
+            synchronized (realValues) {
+                real = realValues.get(account);
+            }
             if (real == null || user == null) {
                 continue;
             }
@@ -205,7 +216,9 @@ public final class DdgProfileOverride {
                 user.flags &= ~8;
             }
         }
-        realValues.clear();
+        synchronized (realValues) {
+            realValues.clear();
+        }
     }
 
     private static TLRPC.User currentUser() {

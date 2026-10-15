@@ -17,6 +17,7 @@ import java.util.Locale;
 
 import app.exteraless.appearance.AppearanceConfig;
 
+import com.duckduckgram.duckerer.config.DdgConfig;
 import com.duckduckgram.duckerer.profile.DdgProfileOverride;
 import com.duckduckgram.duckerer.sidebar.DdgSidebarMetrics;
 
@@ -325,7 +326,12 @@ public class DrawerHeaderView extends FrameLayout {
         premiumStatusDrawable.setCurrentAccount(account);
 
         final String username = DialogObject.getPublicUsername(user);
-        if (username != null && !username.isEmpty()) {
+        if (DdgConfig.streamerMode.Bool()) {
+            // В streamer-режиме подпись под именем скрывается так же, как и на
+            // странице профиля: иначе открытый шторки стороннему взгляду показал бы
+            // @юзернейм/номер, ради скрытия которых режим и включается. Имя остаётся.
+            subtitleView.setText(LocaleController.getString(R.string.MobileHidden));
+        } else if (username != null && !username.isEmpty()) {
             subtitleView.setText("@".concat(username));
         } else if (user.phone == null || user.phone.isEmpty()) {
             subtitleView.setText(LocaleController.getString(R.string.NumberUnknown));
@@ -333,7 +339,7 @@ public class DrawerHeaderView extends FrameLayout {
             // Аналог ExteraConfig.getHidePhoneNumber() — у нас NekoConfig.hidePhone.
             subtitleView.setText(LocaleController.getString(R.string.MobileHidden));
         } else {
-            subtitleView.setText(DdgProfileOverride.displayPhone(user.phone));
+            subtitleView.setText(DdgProfileOverride.displayPhone(user));
         }
 
         final long emojiStatusId = DialogObject.getEmojiStatusDocumentId(user.emoji_status);

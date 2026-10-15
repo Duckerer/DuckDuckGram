@@ -4681,6 +4681,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else if (position == languageRow) {
                 presentFragment(new LanguageSelectActivity());
             } else if (position == setUsernameRow) {
+                if (DdgConfig.streamerMode.Bool()) {
+                    return;
+                }
                 TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
                 if (user == null || TextUtils.isEmpty(user.username)) {
                     presentFragment(new ChangeUsernameActivity());
@@ -4714,6 +4717,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else if (position == bioRow) {
                 presentFragment(new UserInfoActivity());
             } else if (position == numberRow) {
+                if (DdgConfig.streamerMode.Bool()) {
+                    return;
+                }
                 if (NekoConfig.hidePhone.Bool()) {
                     presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER));
                     return;
@@ -4755,11 +4761,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 });
                 showDialog(builder.create());
             } else if (position == phoneRow) {
+                if (DdgConfig.streamerMode.Bool()) {
+                    return;
+                }
                 final TLRPC.User user = getMessagesController().getUser(userId);
                 if (user == null || TextUtils.isEmpty(user.phone)) {
                     return;
                 }
-                String number = DdgProfileOverride.displayPhone(user.phone);
+                String number = DdgProfileOverride.displayPhone(user);
                 BottomBuilder builder = new BottomBuilder(getParentActivity());
                 builder.addTitle(number);
                 builder.addItem(getString(R.string.Call), R.drawable.msg_calls, __ -> {
@@ -7638,6 +7647,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     private boolean processOnClickOrPress(final int position, final View view, final float x, final float y) {
         if (position == usernameRow || position == setUsernameRow) {
+            if (DdgConfig.streamerMode.Bool()) {
+                return false;
+            }
             final String username;
             final TLRPC.TL_username usernameObj;
             if (userId != 0) {
@@ -7788,6 +7800,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         } else if (position == noteRow) {
             editNotes(view, position);
         } else if (position == phoneRow || position == numberRow) {
+            if (DdgConfig.streamerMode.Bool()) {
+                return false;
+            }
             if (editRow(view, position)) return true;
 
             final TLRPC.User user = getMessagesController().getUser(userId);
@@ -14207,7 +14222,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         } else if (!shouldHide && user != null && !TextUtils.isEmpty(user.phone)) {
                             // DuckDuckGram: локальная подмена номера выводится как введена,
                             // без принудительного «+» (displayPhone это учитывает).
-                            text = DdgProfileOverride.displayPhone(user.phone);
+                            text = DdgProfileOverride.displayPhone(user);
                             phoneNumber = user.phone;
                         } else {
                             text = LocaleController.getString(R.string.PhoneHidden);
@@ -18000,22 +18015,29 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     private void showIdDcBottomSheet() {
+        if (DdgConfig.streamerMode.Bool()) {
+            return;
+        }
         long id = getId(true);
         long idForLink = getId(false);
         int dc = getDc();
         BottomBuilder builder = new BottomBuilder(getParentActivity());
+        boolean self = userId != 0 && userId == UserConfig.getInstance(currentAccount).getClientUserId();
         if (userId != 0) {
-            boolean self = userId == UserConfig.getInstance(currentAccount).getClientUserId();
             builder.addTitle(self ? DdgProfileOverride.effectiveAccountId() : id + "", ProfileDateHelper.getUserTime(id));
         } else {
             builder.addTitle(id + "");
         }
-        builder.addItem(getString(R.string.Copy), R.drawable.msg_copy, __ -> {
-            AlertUtil.copyAndAlert(id + "", this);
-            return Unit.INSTANCE;
-        });
+        // Для своего аккаунта первая копия копирует подменённый ID; для чужого —
+        // настоящий. Раньше первый пункт всегда копировал настоящий ID, и на своей
+        // странице он сливал его поверх подмены.
+        if (!self) {
+            builder.addItem(getString(R.string.Copy), R.drawable.msg_copy, __ -> {
+                AlertUtil.copyAndAlert(id + "", this);
+                return Unit.INSTANCE;
+            });
+        }
         if (userId != 0) {
-            boolean self = userId == UserConfig.getInstance(currentAccount).getClientUserId();
             builder.addItem(getString(R.string.Copy), R.drawable.msg_copy, __ -> {
                 AlertUtil.copyAndAlert(self ? DdgProfileOverride.effectiveAccountId() : id + "", this);
                 return Unit.INSTANCE;

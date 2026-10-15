@@ -613,7 +613,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         final StringBuilder sb = new StringBuilder();
         if (!DdgConfig.streamerMode.Bool()) {
             if (!NekoConfig.hidePhone.Bool() && user != null) {
-                sb.append(DdgProfileOverride.displayPhone(user.phone));
+                sb.append(DdgProfileOverride.displayPhone(user));
             }
             final String username = UserObject.getPublicUsername(user);
             if (username != null) {

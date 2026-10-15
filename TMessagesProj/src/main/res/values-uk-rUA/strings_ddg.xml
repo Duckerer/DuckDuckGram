@@ -77,6 +77,9 @@
     <string name="DDGKeepOriginalFileNames">Зберігати початкові імена файлів</string>
     <string name="DDGHideMessageTime">Приховувати час у повідомленнях</string>
     <string name="DDGHideMessageTimeInfo">Прибирає позначку часу всередині бульбашок повідомлень. Позначки про прочитання залишаються видимими.</string>
+    <string name="DDGCollapseDuplicateMessages">Згортати повторювані повідомлення</string>
+    <string name="DDGCollapseDuplicateMessagesInfo">Однакові повідомлення поспіль від одного відправника показуються однією бульбашкою із загальною кількістю; ваші власні повідомлення не згортаються</string>
+    <string name="DDGCollapseGradient">Колір лічильника</string>
 
     <!-- Media -->
     <string name="DDGRestyledPlayer">Оновлений аудіоплеєр</string>

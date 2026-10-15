@@ -122,6 +122,19 @@ public class DdgOtherActivity extends DdgCategoryActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
+        // getDocumentSelectActivity() при отсутствии разрешения на Android < 13 только
+        // запрашивает его и возвращает null — повторяем импорт после выдачи, иначе
+        // первый тап после гранта навсегда оставался бы «бездействием».
+        if (requestCode == BasePermissionsActivity.REQUEST_CODE_EXTERNAL_STORAGE
+                && grantResults != null && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            importSettings();
+        }
+        super.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
+    }
+
     private void openBadgeShop() {
         getMessagesController().openByUserName(DdgSupporters.BADGES_BOT, this, 1);
     }
@@ -276,7 +289,9 @@ public class DdgOtherActivity extends DdgCategoryActivity {
                 } catch (Exception ignore) {
                 }
             }
-            super.onActivityResultFragment(requestCode, resultCode, data);
         }
+        // Всегда передаём результат дальше: без super на чужом requestCode дочерние
+        // фрагменты/другие экраны теряли бы свои результаты.
+        super.onActivityResultFragment(requestCode, resultCode, data);
     }
 }

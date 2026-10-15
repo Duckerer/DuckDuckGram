@@ -6183,7 +6183,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             if (progress != null) {
                 progress.end();
             }
-            com.duckduckgram.duckerer.updater.GitHubUpdater.check(force || progress != null);
+            app.exteraless.updater.GitHubUpdater.check(force || progress != null);
             return;
         }
        /*if (!ApplicationLoader.isStandaloneBuild() && !ApplicationLoader.isBetaBuild()) {

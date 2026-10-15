@@ -25,6 +25,8 @@ import java.util.List;
 import tw.nekomimi.nekogram.config.ConfigItem;
 import tw.nekomimi.nekogram.settings.BaseNekoSettingsActivity;
 import tw.nekomimi.nekogram.ui.cells.HeaderCell;
+import tw.nekomimi.nekogram.config.cell.ConfigCellCustom;
+import tw.nekomimi.nekogram.config.cell.AbstractConfigCell;
 
 /**
  * Базовый экран категории DuckDuckGram Preferences.
@@ -50,6 +52,8 @@ public abstract class DdgCategoryActivity extends BaseNekoSettingsActivity {
         /** Переключатель над состоянием, которое живёт не в ConfigItem. */
         public static final int BRIDGE = 6;
         public static final int RADIO = 7;
+        /** Нестандартная ячейка, которую рисует конкретный экран. */
+        public static final int TYPE_CUSTOM = 8;
 
         public final int type;
         public final int titleRes;
@@ -98,6 +102,30 @@ public abstract class DdgCategoryActivity extends BaseNekoSettingsActivity {
             this.boolGetter = boolGetter;
             this.boolSetter = boolSetter;
             this.optionsRes = optionsRes;
+            this.customType = -1;
+        }
+
+        /**
+         * Тип нестандартной ячейки (viewType ≥ 100). -1 — обычная строка.
+         * Конкретный экран сам создаёт и привязывает такие ячейки через
+         * {@link #onCreateCustomViewHolder} и {@link #onBindCustomViewHolder}.
+         */
+        public int customType;
+
+        private Row(int customType) {
+            this.type = TYPE_CUSTOM;
+            this.titleRes = 0;
+            this.titleText = null;
+            this.infoRes = 0;
+            this.iconRes = 0;
+            this.config = null;
+            this.valueProvider = null;
+            this.action = null;
+            this.boolGetter = null;
+            this.boolSetter = null;
+            this.optionsRes = null;
+            this.optionValues = null;
+            this.customType = customType;
         }
 
         /** Заголовок строки: готовый текст либо строка из ресурсов. */
@@ -174,6 +202,11 @@ public abstract class DdgCategoryActivity extends BaseNekoSettingsActivity {
             return new Row(VALUE, titleRes, null, 0, 0, null, provider, action, null, null, null);
         }
 
+        /** Строка-ячейка нестандартного вида: рисуется конкретным экраном. */
+        public static Row custom(int customType) {
+            return new Row(customType);
+        }
+
         public static Row info(int titleRes) {
             return new Row(INFO, titleRes, null, 0, 0, null, null, null, null, null, null);
         }
@@ -220,8 +253,6 @@ public abstract class DdgCategoryActivity extends BaseNekoSettingsActivity {
     }
 
     private final List<Row> rows = new ArrayList<>();
-    /** Позиции строк, по которым нужно перерисовать список после смены настройки. */
-    private int toggleRow = -1;
 
     /** Список пунктов категории. Каждая реализация собирает свой ряд. */
     protected abstract List<Row> buildRows();
@@ -409,6 +440,18 @@ public abstract class DdgCategoryActivity extends BaseNekoSettingsActivity {
     protected void onToggleChanged(Row row, int position, boolean enabled) {
     }
 
+    /**
+     * Создать вид для нестандартной строки ({@link Row#custom}). По умолчанию
+     * таких ячеек нет — возвращаем {@code null}, и список строит обычную ячейку.
+     */
+    protected View onCreateCustomViewHolder(android.view.ViewGroup parent, int viewType) {
+        return null;
+    }
+
+    /** Привязать данные к нестандартной ячейке. По умолчанию ничего не делаем. */
+    protected void onBindCustomViewHolder(RecyclerView.ViewHolder holder, int position) {
+    }
+
     /** Пересобрать строки: вызывать, если переключатель меняет состав списка. */
     protected void rebuildRows() {
         updateRows();
@@ -422,6 +465,9 @@ public abstract class DdgCategoryActivity extends BaseNekoSettingsActivity {
     }
 
     private static int viewTypeOf(Row row) {
+        if (row.customType >= 0) {
+            return row.customType;
+        }
         switch (row.type) {
             case Row.HEADER:
                 return TYPE_HEADER;
@@ -453,10 +499,25 @@ public abstract class DdgCategoryActivity extends BaseNekoSettingsActivity {
             return row == null ? TYPE_SHADOW : viewTypeOf(row);
         }
 
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull android.view.ViewGroup parent, int viewType) {
+            android.view.View view = DdgCategoryActivity.this.onCreateCustomViewHolder(parent, viewType);
+            if (view != null) {
+                view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
+                return new RecyclerListView.Holder(view);
+            }
+            return super.onCreateViewHolder(parent, viewType);
+        }
+
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, boolean partial) {
             Row row = rowAt(position);
             if (row == null) {
+                return;
+            }
+            if (row.customType >= 0) {
+                DdgCategoryActivity.this.onBindCustomViewHolder(holder, position);
                 return;
             }
             switch (row.type) {

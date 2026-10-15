@@ -19,7 +19,6 @@ import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import com.duckduckgram.duckerer.updater.UpdaterSheet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -218,8 +217,7 @@ public class DdgSettingsActivity extends BaseNekoSettingsActivity {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             if (viewType == TYPE_ABOUT) {
-                DdgHeaderCell view = new DdgHeaderCell(mContext);
-                view.setOnLogoClickListener(v -> showDialog(new UpdaterSheet(DdgSettingsActivity.this)));
+                View view = new DdgHeaderCell(mContext);
                 view.setTag(RecyclerListView.TAG_NOT_SECTION);
                 view.setLayoutParams(new RecyclerView.LayoutParams(
                         RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));

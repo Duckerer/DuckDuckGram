@@ -78,6 +78,9 @@
     <string name="DDGKeepOriginalFileNames">Сохранять исходные имена файлов</string>
     <string name="DDGHideMessageTime">Скрывать время в сообщениях</string>
     <string name="DDGHideMessageTimeInfo">Убирает отметку времени внутри пузырей сообщений. Отметки о прочтении остаются видимыми.</string>
+    <string name="DDGCollapseDuplicateMessages">Сворачивать повторяющиеся сообщения</string>
+    <string name="DDGCollapseDuplicateMessagesInfo">Одинаковые сообщения подряд от одного отправителя показываются одним пузырём с общим количеством; ваши собственные сообщения не сворачиваются</string>
+    <string name="DDGCollapseGradient">Цвет счётчика</string>
 
     <!-- Media -->
     <string name="DDGRestyledPlayer">Обновлённый аудиоплеер</string>

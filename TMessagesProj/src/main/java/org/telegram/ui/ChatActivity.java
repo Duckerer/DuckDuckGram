@@ -1441,7 +1441,8 @@ public class ChatActivity extends BaseFragment implements
             NotificationCenter.didSetNewWallpapper,
             NotificationCenter.savedMessagesDialogsUpdate,
             NotificationCenter.didApplyNewTheme,
-            NotificationCenter.messageReceivedByServer2
+            NotificationCenter.messageReceivedByServer2,
+            NotificationCenter.ddgMessageListReload
     };
 
     private final DialogInterface.OnCancelListener postponedScrollCancelListener = dialog -> {
@@ -3338,7 +3339,8 @@ public class ChatActivity extends BaseFragment implements
             .addGlobal(NotificationCenter.invalidateMotionBackground)
             .addGlobal(NotificationCenter.didSetNewWallpapper)
             .addGlobal(NotificationCenter.didApplyNewTheme)
-            .addGlobal(NotificationCenter.goingToPreviewTheme);
+            .addGlobal(NotificationCenter.goingToPreviewTheme)
+            .addGlobal(NotificationCenter.ddgMessageListReload);
 
         if (chatMode == MODE_EDIT_BUSINESS_LINK) {
             observersGroup.add(NotificationCenter.businessLinksUpdated);
@@ -18149,13 +18151,24 @@ public class ChatActivity extends BaseFragment implements
 
             int index = chatAdapter.getMessages().indexOf(object);
             if (index != -1) {
+                // Ddg: цель может быть скрытой копией повтора — тогда скроллим и
+                // подсвечиваем видимую «голову» серии, а не 1px DummyView.
+                boolean collapseRedirect = false;
+                if (collapseRelevant()) {
+                    int head = collapseRunHeadIndex(chatAdapter.getMessages(), index);
+                    if (head != index) {
+                        index = head;
+                        object = chatAdapter.getMessages().get(head);
+                        collapseRedirect = true;
+                    }
+                }
                 if (scrollFromIndex > 0) {
                     scrollDirection = scrollFromIndex > index ? RecyclerAnimationScrollHelper.SCROLL_DIRECTION_DOWN : RecyclerAnimationScrollHelper.SCROLL_DIRECTION_UP;
                     chatScrollHelper.setScrollDirection(scrollDirection);
                 }
                 removeSelectedMessageHighlight();
                 if (select) {
-                    highlightMessageId = id;
+                    highlightMessageId = collapseRedirect ? object.getId() : id;
                     highlightTaskId = taskId;
                     highlightPollOptionId = pollOptionId;
                 }
@@ -25661,6 +25674,14 @@ public class ChatActivity extends BaseFragment implements
                 }
                 chatListView.invalidateViews();
             }
+        } else if (id == NotificationCenter.ddgMessageListReload) {
+            if (chatAdapter != null) {
+                // notifyDataSetChanged(false) полностью перебиндит видимые клетки
+                // (setMessageContent -> measureTime + refillCount), поэтому ручной
+                // проход по детям больше не нужен.
+                chatAdapter.updateRowsSafe();
+                chatAdapter.notifyDataSetChanged(false);
+            }
         } else if (id == NotificationCenter.didApplyNewTheme) {
             if (undoView == null || paused) {
                 return;
@@ -27759,11 +27780,17 @@ public class ChatActivity extends BaseFragment implements
                 if (notPushedSponsoredMessages != null && notPushedSponsoredMessages.contains(obj)) {
                     notPushedSponsoredMessages.remove(obj);
                 }
-                if (chatAdapter != null) {
-                    chatAdapter.checkRemoveBotForumRowsStartThreadRow(false);
-                    chatAdapter.notifyItemChanged(chatAdapter.messagesStartRow + placeToPaste);
-                    chatAdapter.notifyItemInserted(chatAdapter.messagesStartRow + placeToPaste);
-                }
+                 if (chatAdapter != null) {
+                     chatAdapter.checkRemoveBotForumRowsStartThreadRow(false);
+                     chatAdapter.notifyItemChanged(chatAdapter.messagesStartRow + placeToPaste);
+                     chatAdapter.notifyItemInserted(chatAdapter.messagesStartRow + placeToPaste);
+                     // Ddg: пересчитываем свёртку вокруг вставленного сообщения. Индекс 0 —
+                     // самое новое сообщение, поэтому при вставке дубля в начало серия
+                     // сдвигается и её видимая «голова» перестаёт перебиндиваться штатно —
+                     // без этого ×N появлялся только после перезахода в чат. Плюс покрываем
+                     // серию слева, которая могла быть усечена вставкой в середину.
+                     refreshCollapseAround(placeToPaste);
+                 }
                 if ((obj.isOut() || chatMode == MODE_WELCOME_MESSAGES) && waitingForSendingMessageLoad) {
                     waitingForSendingMessageLoad = false;
                     if (!animatingMessageObjects.contains(obj)) {
@@ -28566,13 +28593,15 @@ public class ChatActivity extends BaseFragment implements
                 if (messageObject.type >= 0) {
                     messageObject.reactionsChanged |= old.isBotPendingDraft && !messageObject.isBotPendingDraft;
                     messageObject.copyStableParams(old);
-                    messages.set(index, messageObject);
-                    if (chatAdapter != null && !chatAdapter.isFiltered) {
-                        chatAdapter.updateRowAtPosition(chatAdapter.messagesStartRow + index);
-                    }
-                    if (index2 >= 0) {
-                        dayArr.set(index2, messageObject);
-                    }
+                     messages.set(index, messageObject);
+                     if (chatAdapter != null && !chatAdapter.isFiltered) {
+                         chatAdapter.updateRowAtPosition(chatAdapter.messagesStartRow + index);
+                     }
+                     // Ddg: правка меняет состав серии — пересчитываем соседей.
+                     refreshCollapseAround(index);
+                     if (index2 >= 0) {
+                         dayArr.set(index2, messageObject);
+                     }
                 } else {
                     messages.remove(index);
                     if (chatAdapter != null && !chatAdapter.isFiltered) {
@@ -31843,6 +31872,7 @@ public class ChatActivity extends BaseFragment implements
         if (wasPaused) {
             wasPaused = false;
             if (chatAdapter != null) {
+                chatAdapter.updateRowsSafe();
                 chatAdapter.notifyDataSetChanged(false);
             }
         }
@@ -35172,14 +35202,16 @@ public class ChatActivity extends BaseFragment implements
                 if (index >= 0) {
                     chatAdapter.notifyItemChanged(chatAdapter.messagesStartRow + index);
                 }
-            } else {
-                int index = messages.indexOf(messageInList);
-                if (index >= 0) {
-                    chatAdapter.notifyItemChanged(chatAdapter.messagesStartRow + index);
-                }
-            }
-        }
-    }
+             } else {
+                 int index = messages.indexOf(messageInList);
+                 if (index >= 0) {
+                     chatAdapter.notifyItemChanged(chatAdapter.messagesStartRow + index);
+                     // Ddg: пересчёт серии вокруг изменённого сообщения.
+                     refreshCollapseAround(index);
+                 }
+             }
+         }
+     }
 
     public BaseCell findMessageCell(int id, boolean visibleForUser) {
         if (chatListView == null) {
@@ -37367,6 +37399,9 @@ public class ChatActivity extends BaseFragment implements
                     } else {
                         cell.linkedChatId = chatInfo != null ? chatInfo.linked_chat_id : 0;
                     }
+                    if (DdgConfig.collapseDuplicateMessages.Bool()) {
+                        refillMessageCellCollapsedCount(cell, messageObject);
+                    }
                     cell.setMessageObject(messageObject, cell.getCurrentMessagesGroup(), cell.isPinnedBottom(), cell.isPinnedTop(), cell.isFirstInChat(), cell.isLastInChatList());
                     cell.setIsUpdating(false);
                 }
@@ -39198,6 +39233,8 @@ public class ChatActivity extends BaseFragment implements
         messages.remove(index);
         if (chatAdapter != null && !chatAdapter.isFiltered) {
             chatAdapter.notifyItemRemoved(chatAdapter.messagesStartRow + index);
+            // Ddg: удаление могло открыть/изменить видимую голову серии.
+            refreshCollapseAround(index);
         }
     }
 
@@ -39209,6 +39246,7 @@ public class ChatActivity extends BaseFragment implements
         messages.remove(index);
         if (chatAdapter != null && !chatAdapter.isFiltered) {
             chatAdapter.notifyItemRemoved(chatAdapter.messagesStartRow + index, true);
+            refreshCollapseAround(index);
         }
     }
 
@@ -40888,7 +40926,10 @@ public class ChatActivity extends BaseFragment implements
                     //    pinnedBottom = true;
                     //}
 
-                    messageCell.setShowTopic(true);
+messageCell.setShowTopic(true);
+                    // Ddg: «голова» серии повторов знает число свернутых копий —
+                    // measureTime добавит их в подпись времени (×N).
+                    messageCell.collapsedCount = collapsedDuplicateCount(messages, position - messagesStartRow);
                     messageCell.setMessageObject(message, groupedMessages, pinnedBottom, pinnedTop, firstInChat, lastInChatList);
                     messageCell.setSpoilersSuppressed(chatListView.getScrollState() != RecyclerView.SCROLL_STATE_IDLE);
                     messageCell.setHighlighted(highlightMessageId != Integer.MAX_VALUE && message.getId() == highlightMessageId);
@@ -41223,6 +41264,10 @@ public class ChatActivity extends BaseFragment implements
                 if (msg == null || msg.messageOwner != null && msg.messageOwner.hide) {
                     return -1000;
                 }
+                // Ddg: свернутый повтор невидимый, но остаётся настоящим сообщением.
+                if (isCollapsedDuplicate(messages, position - messagesStartRow)) {
+                    return -1000;
+                }
                 if (NekoConfig.ignoreBlocked.Bool() && ChatObject.isMegagroup(currentChat)) {
                     long fromId = msg.getFromChatId();
                     if (isBlockedUser(fromId) || AyuFilter.isBlockedChannel(fromId)) {
@@ -41245,6 +41290,9 @@ public class ChatActivity extends BaseFragment implements
                         var m = messages.get(i);
                         if (m == null) continue;
                         if (m.messageOwner != null && m.messageOwner.hide) {
+                            continue;
+                        }
+                        if (isCollapsedDuplicate(messages, i)) {
                             continue;
                         }
                         if (NekoConfig.ignoreBlocked.Bool() && ChatObject.isMegagroup(currentChat)) {
@@ -41311,8 +41359,10 @@ public class ChatActivity extends BaseFragment implements
                     }
                 }
                 if (message.updateTranslation(false)) {
+                    refillMessageCellCollapsedCount(messageCell, message);
                     messageCell.setMessageObject(message, messageCell.getCurrentMessagesGroup(), messageCell.isPinnedBottom(), messageCell.isPinnedTop(), messageCell.isFirstInChat(), messageCell.isLastInChatList());
                 } else {
+                    refillMessageCellCollapsedCount(messageCell, message);
                     MessageObject.GroupedMessages group = messageCell.getCurrentMessagesGroup();
                     if (group != null) {
                         for (int i = 0; i < group.messages.size(); ++i) {
@@ -47833,6 +47883,334 @@ public class ChatActivity extends BaseFragment implements
 
     public MessageObject.GroupedMessages getGroup(long id) {
         return groupedMessagesMap.get(id);
+    }
+
+     // ---- DuckDuckGram: сворачивание подряд идущих одинаковых сообщений ----
+     // В messages index 0 — самое НОВОЕ сообщение, больший индекс — старее.
+     // Серия «одинаковых» считается по соседству: message[i] повтор message[i-1]
+     // (предыдущего, более нового), если отправитель, текст и раскладка совпадают.
+     // Видимым остаётся ПОСЛЕДНЕЕ (новейшее) сообщение серии — при флуде у края
+     // списка видно одно актуальное «сообщение + ×N», а не пустоту. Скрытие —
+     // переиспользование штатного механизма скрытых сообщений (viewType -1000 +
+     // DummyView), поэтому индексы списка и messagesStartRow/EndRow не трогаются.
+     private boolean isCollapsedDuplicate(ArrayList<MessageObject> messages, int index) {
+         if (!collapseRelevant()) {
+             return false;
+         }
+         if (index <= 0 || index >= messages.size()) {
+             return false;
+         }
+         return sameCollapsibleTextMessage(messages.get(index - 1), messages.get(index));
+     }
+
+     private int collapsedDuplicateCount(ArrayList<MessageObject> messages, int index) {
+         if (!collapseRelevant()) {
+             return 0;
+         }
+         if (index < 0 || index >= messages.size()) {
+             return 0;
+         }
+         int count = 1;
+         for (int j = index + 1; j < messages.size(); j++) {
+             if (!sameCollapsibleTextMessage(messages.get(j - 1), messages.get(j))) {
+                 break;
+             }
+             count++;
+         }
+         return count;
+     }
+
+     /**
+      * Сворачивание применимо только в обычном режиме, без шифрованного чата и
+      * вне режима фильтра (в отфильтрованном списке соседние сообщения могут не
+      * быть соседними в реальном чате — тогда нельзя объединять «подряд идущие»).
+      */
+     private boolean collapseRelevant() {
+         if (!DdgConfig.collapseDuplicateMessages.Bool() || chatMode != MODE_DEFAULT || currentEncryptedChat != null) {
+             return false;
+         }
+         return chatAdapter == null || !chatAdapter.isFiltered;
+     }
+
+     /**
+      * Индекс видимой «головы» серии (самое новое сообщение серии), содержащей
+      * позицию {@code index}. Нужен, чтобы навигация к скрытой копии вела к
+      * реально видимому сообщению.
+      */
+     private int collapseRunHeadIndex(ArrayList<MessageObject> messages, int index) {
+         if (index <= 0 || index >= messages.size()) {
+             return index;
+         }
+         while (index > 0 && sameCollapsibleTextMessage(messages.get(index - 1), messages.get(index))) {
+             index--;
+         }
+         return index;
+     }
+
+     /**
+      * Пересчитывает скрытие/счётчик серий, затронутых изменением в позиции
+      * {@code centerIndex}. Покрывает и серию, которая могла быть усечена при
+      * вставке в середину (сосед слева), и серию вставленного сообщения, и
+      * соседа справа — иначе видимая «голова» остаётся со старым ×N или целая
+      * серия пропадает, оставаясь DummyView.
+      */
+     private void refreshCollapseAround(int centerIndex) {
+         if (chatAdapter == null || chatAdapter.isFiltered || !DdgConfig.collapseDuplicateMessages.Bool()
+                 || chatMode != MODE_DEFAULT || currentEncryptedChat != null) {
+             return;
+         }
+         final ArrayList<MessageObject> list = messages;
+         if (centerIndex < 0 || centerIndex >= list.size()) {
+             return;
+         }
+         int from = centerIndex;
+         int to = centerIndex;
+         while (from - 1 >= 0 && sameCollapsibleTextMessage(list.get(from), list.get(from - 1))) {
+             from--;
+         }
+         while (to + 1 < list.size() && sameCollapsibleTextMessage(list.get(to + 1), list.get(to))) {
+             to++;
+         }
+         if (centerIndex - 1 >= 0) {
+             int f2 = centerIndex - 1;
+             while (f2 - 1 >= 0 && sameCollapsibleTextMessage(list.get(f2), list.get(f2 - 1))) {
+                 f2--;
+             }
+             from = Math.min(from, f2);
+         }
+         if (centerIndex + 1 < list.size()) {
+             int t2 = centerIndex + 1;
+             while (t2 + 1 < list.size() && sameCollapsibleTextMessage(list.get(t2 + 1), list.get(t2))) {
+                 t2++;
+             }
+             to = Math.max(to, t2);
+         }
+         if (from > 0) {
+             from--;
+         }
+         if (to < list.size() - 1) {
+             to++;
+         }
+         chatAdapter.notifyItemRangeChanged(chatAdapter.messagesStartRow + from, to - from + 1);
+     }
+
+    private boolean sameCollapsibleTextMessage(MessageObject cur, MessageObject prev) {
+        if (cur == null || prev == null || cur.isDateObject || prev.isDateObject) {
+            return false;
+        }
+        if (cur.messageOwner == null || prev.messageOwner == null) {
+            return false;
+        }
+        if (cur.messageOwner.out != prev.messageOwner.out) {
+            return false;
+        }
+        // Свои (исходящие) не сворачиваются — дубли собственного флуда остаются видимыми.
+        if (cur.isOutOwner() || prev.isOutOwner()) {
+            return false;
+        }
+        // Удалённые (AyuGram) заглушки не сворачиваются.
+        if (cur.isAyuDeleted() || prev.isAyuDeleted()) {
+            return false;
+        }
+        if (cur.type != prev.type) {
+            return false;
+        }
+        if (cur.getFromChatId() != prev.getFromChatId()) {
+            return false;
+        }
+        // Разные (или ещё не созданные, getTopicId() == -1) топики не сворачиваются.
+        long topic1 = cur.getTopicId();
+        long topic2 = prev.getTopicId();
+        if (topic1 != topic2 || topic1 == -1) {
+            return false;
+        }
+        if (cur.getGroupId() != 0 || prev.getGroupId() != 0) {
+            return false;
+        }
+        // Rich-сообщения (статьи) рендерятся из rich_message, а message у них пустой —
+        // иначе два разных rich-поста слились бы по пустому тексту. Не сворачиваем.
+        if (cur.messageOwner.rich_message != null || prev.messageOwner.rich_message != null) {
+            return false;
+        }
+        // Раскладка зависит от вложений: строгая «пустота» (webpage считается медиа),
+        // поэтому ссылка-превью больше не сворачивается с обычным текстом.
+        boolean plain1 = cur.isMediaEmptyWebpage();
+        boolean plain2 = prev.isMediaEmptyWebpage();
+        if (plain1 != plain2) {
+            return false;
+        }
+        if (cur.isReply() || prev.isReply() || cur.isReplyToStory() || prev.isReplyToStory()) {
+            return false;
+        }
+        if (cur.messageOwner.mentioned || prev.messageOwner.mentioned) {
+            return false;
+        }
+        if (cur.messageOwner.reply_markup != null || prev.messageOwner.reply_markup != null) {
+            return false;
+        }
+        if (cur.messageOwner.edit_date != prev.messageOwner.edit_date) {
+            return false;
+        }
+        if (cur.messageOwner.fwd_from != null || prev.messageOwner.fwd_from != null) {
+            return false;
+        }
+        if (cur.messageOwner.via_bot_id != prev.messageOwner.via_bot_id
+                || cur.messageOwner.via_business_bot_id != prev.messageOwner.via_business_bot_id) {
+            return false;
+        }
+        // Подпись автора (анонимный админ), звание и имя бота видны в пузыре.
+        if (!equalsStr(cur.messageOwner.post_author, prev.messageOwner.post_author)
+                || !equalsStr(cur.messageOwner.from_rank, prev.messageOwner.from_rank)
+                || !equalsStr(cur.messageOwner.via_bot_name, prev.messageOwner.via_bot_name)) {
+            return false;
+        }
+        if (cur.messageOwner.silent != prev.messageOwner.silent
+                || cur.messageOwner.noforwards != prev.messageOwner.noforwards
+                || cur.messageOwner.invert_media != prev.messageOwner.invert_media
+                || cur.messageOwner.pinned != prev.messageOwner.pinned
+                || cur.messageOwner.ttl_period != prev.messageOwner.ttl_period
+                || cur.messageOwner.paid_message_stars != prev.messageOwner.paid_message_stars) {
+            return false;
+        }
+        int replies1 = cur.messageOwner.replies != null ? cur.messageOwner.replies.replies : 0;
+        int replies2 = prev.messageOwner.replies != null ? prev.messageOwner.replies.replies : 0;
+        if (replies1 != replies2) {
+            return false;
+        }
+        if (!sameFactCheck(cur.messageOwner.factcheck, prev.messageOwner.factcheck)) {
+            return false;
+        }
+        if (!sameReactions(cur.messageOwner.reactions, prev.messageOwner.reactions)) {
+            return false;
+        }
+        if (plain1) {
+            String t1 = cur.messageOwner.message;
+            String t2 = prev.messageOwner.message;
+            return t1 != null && t1.equals(t2) && sameEntities(cur.messageOwner.entities, prev.messageOwner.entities);
+        }
+        return sameCollapsibleMedia(cur, prev);
+    }
+
+    private static boolean equalsStr(String a, String b) {
+        return a == null ? b == null : a.equals(b);
+    }
+
+    /**
+     * Форматирование (entities) влияет на внешний вид текста, поэтому два
+     * одинаковых по строке сообщения с разной разметкой не должны сливаться.
+     */
+    private static boolean sameEntities(ArrayList<TLRPC.MessageEntity> a, ArrayList<TLRPC.MessageEntity> b) {
+        int aSize = a == null ? 0 : a.size();
+        int bSize = b == null ? 0 : b.size();
+        if (aSize != bSize) {
+            return false;
+        }
+        if (aSize == 0) {
+            return true;
+        }
+        try {
+            org.telegram.tgnet.SerializedData sa = new org.telegram.tgnet.SerializedData();
+            sa.writeInt32(aSize);
+            for (int i = 0; i < aSize; i++) {
+                a.get(i).serializeToStream(sa);
+            }
+            org.telegram.tgnet.SerializedData sb = new org.telegram.tgnet.SerializedData();
+            sb.writeInt32(bSize);
+            for (int i = 0; i < bSize; i++) {
+                b.get(i).serializeToStream(sb);
+            }
+            return Arrays.equals(sa.toByteArray(), sb.toByteArray());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private static String reactionKey(TLRPC.Reaction r) {
+        if (r instanceof TLRPC.TL_reactionEmoji) {
+            return "e:" + ((TLRPC.TL_reactionEmoji) r).emoticon;
+        } else if (r instanceof TLRPC.TL_reactionCustomEmoji) {
+            return "c:" + ((TLRPC.TL_reactionCustomEmoji) r).document_id;
+        } else if (r instanceof TLRPC.TL_reactionPaid) {
+            return "p";
+        }
+        return r == null ? "n" : r.getClass().getName();
+    }
+
+    private static boolean sameReactions(TLRPC.TL_messageReactions a, TLRPC.TL_messageReactions b) {
+        int aSize = a == null || a.results == null ? 0 : a.results.size();
+        int bSize = b == null || b.results == null ? 0 : b.results.size();
+        if (aSize != bSize) {
+            return false;
+        }
+        for (int i = 0; i < aSize; i++) {
+            TLRPC.ReactionCount ra = a.results.get(i);
+            TLRPC.ReactionCount rb = b.results.get(i);
+            if (ra.count != rb.count || ra.chosen != rb.chosen
+                    || !reactionKey(ra.reaction).equals(reactionKey(rb.reaction))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean sameFactCheck(TLRPC.TL_factCheck a, TLRPC.TL_factCheck b) {
+        if (a == null || b == null) {
+            return a == b;
+        }
+        return a.hash == b.hash && a.need_check == b.need_check && equalsStr(a.country, b.country);
+    }
+
+    /**
+     * Визуально одинаковы (и потому сворачиваются) только стикеры с тем же
+     * документом и dice/эмодзи с той же строкой и тем же результатом/ставкой.
+     * Фото, видео, файлы, ссылки и прочие медиа различаются содержимым — они
+     * не сворачиваются.
+     */
+    private static boolean sameCollapsibleMedia(MessageObject cur, MessageObject prev) {
+        TLRPC.MessageMedia m1 = cur.messageOwner.media;
+        TLRPC.MessageMedia m2 = prev.messageOwner.media;
+        if (cur.isSticker() && prev.isSticker()) {
+            if (m1 == null || m2 == null || m1.document == null || m2.document == null) {
+                return false;
+            }
+            return m1.document.id == m2.document.id
+                    && m1.document.dc_id == m2.document.dc_id
+                    && m1.document.access_hash == m2.document.access_hash;
+        }
+        if (m1 instanceof TLRPC.TL_messageMediaDice && m2 instanceof TLRPC.TL_messageMediaDice) {
+            TLRPC.TL_messageMediaDice d1 = (TLRPC.TL_messageMediaDice) m1;
+            TLRPC.TL_messageMediaDice d2 = (TLRPC.TL_messageMediaDice) m2;
+            String v1 = cur.getDiceEmoji(d1);
+            String v2 = prev.getDiceEmoji(d2);
+            if (v1 == null || !v1.equals(v2)) {
+                return false;
+            }
+            // Результат броска и ставку тоже сравниваем, иначе разные исходы сливаются.
+            long s1 = d1.game_outcome != null ? d1.game_outcome.stake_ton_amount : 0;
+            long s2 = d2.game_outcome != null ? d2.game_outcome.stake_ton_amount : 0;
+            long w1 = d1.game_outcome != null ? d1.game_outcome.ton_amount : 0;
+            long w2 = d2.game_outcome != null ? d2.game_outcome.ton_amount : 0;
+            return d1.value == d2.value && s1 == s2 && w1 == w2;
+        }
+        return false;
+    }
+
+    private void refillMessageCellCollapsedCount(ChatMessageCell messageCell, MessageObject message) {
+        final ArrayList<MessageObject> messages;
+        if (chatAdapter == null || chatAdapter.isFrozen) {
+            messages = chatAdapter != null ? chatAdapter.frozenMessages : ChatActivity.this.messages;
+        } else if (chatAdapter.isFiltered) {
+            messages = chatAdapter.filteredMessages;
+        } else {
+            messages = ChatActivity.this.messages;
+        }
+        int index = messages.indexOf(message);
+        if (index >= 0) {
+            messageCell.collapsedCount = collapsedDuplicateCount(messages, index);
+        } else {
+            // Сообщение не найдено в текущем списке — сбрасываем, чтобы не висел старый ×N.
+            messageCell.collapsedCount = 1;
+        }
     }
 
     private MessageSkeleton getNewSkeleton(boolean noAvatar) {

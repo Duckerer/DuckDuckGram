@@ -30,7 +30,12 @@ object DdgSendWhenOnline {
 
     private data class HeldMessage(val account: Int, val params: SendMessagesHelper.SendMessageParams)
 
-    private val held = HashMap<Long, ArrayList<HeldMessage>>()
+    private data class HeldKey(val account: Int, val peer: Long)
+
+    private val held = HashMap<HeldKey, ArrayList<HeldMessage>>()
+
+    /** Очередь дергается и с UI, и с фоновых путей отправки — одна блокировка на карту. */
+    private val heldLock = Any()
 
     /** Защита от рекурсии: разгребание очереди заново вызывает sendMessage. */
     private var flushing = false
@@ -48,7 +53,9 @@ object DdgSendWhenOnline {
         if (!shouldHold(currentAccount, params)) {
             return false
         }
-        held.getOrPut(peer) { ArrayList() }.add(HeldMessage(currentAccount, params))
+        synchronized(heldLock) {
+            held.getOrPut(HeldKey(currentAccount, peer)) { ArrayList() }.add(HeldMessage(currentAccount, params))
+        }
 
         AndroidUtilities.runOnUIThread {
             toast(LocaleController.formatString(R.string.DDGSendOnlyOnlineHeld, peerName(currentAccount, peer)))
@@ -65,25 +72,32 @@ object DdgSendWhenOnline {
         if (flushing || !DdgConfig.sendOnlyOnline.Bool()) {
             return
         }
-        val queued = held[userId] ?: return
+        val queued = synchronized(heldLock) { held[HeldKey(currentAccount, userId)] } ?: return
         if (queued.isEmpty() || !isOnline(currentAccount, userId)) {
             return
         }
-        held.remove(userId)
+        synchronized(heldLock) { held.remove(HeldKey(currentAccount, userId)) }
         flush(queued)
     }
 
     /** Настройка выключена — сбрасываем копившиеся сообщения в обычную отправку. */
     @JvmStatic
     fun onSettingDisabled() {
-        if (flushing || held.isEmpty()) {
+        // Осознанно без `if (flushing) return`: идущий flush уже вынул свою запись из
+        // held, а здесь мы забираем остаток — наборы не пересекаются, двойной отправки
+        // нет. Ранний выход (как было) заставлял тушить настройку мимо очереди, пока
+        // параллельно шёл хоть один flush, и оставшиеся сообщения зависали навсегда.
+        val all = synchronized(heldLock) {
+            val copy = ArrayList<HeldMessage>()
+            for (queued in held.values) {
+                copy.addAll(queued)
+            }
+            held.clear()
+            copy
+        }
+        if (all.isEmpty()) {
             return
         }
-        val all = ArrayList<HeldMessage>()
-        for (queued in held.values) {
-            all.addAll(queued)
-        }
-        held.clear()
         flush(all)
     }
 
@@ -115,7 +129,11 @@ object DdgSendWhenOnline {
         flushing = true
         try {
             for (msg in queued) {
-                SendMessagesHelper.getInstance(msg.account).sendMessage(msg.params)
+                // Изоляция: исключение из одного сообщения не должно ронять всю
+                // очередь. Неудачное остаётся в рамках этого вызова.
+                runCatching {
+                    SendMessagesHelper.getInstance(msg.account).sendMessage(msg.params)
+                }
             }
         } finally {
             flushing = false

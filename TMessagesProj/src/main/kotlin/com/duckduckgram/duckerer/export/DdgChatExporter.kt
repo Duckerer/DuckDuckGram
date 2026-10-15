@@ -190,10 +190,24 @@ object DdgChatExporter {
                     // Отдельное соединение с той же базой, см. openReadConnection.
                     val db = openReadConnection(accountNum)
                     try {
+                        // При переполнении важнее новые сообщения, а не старые: историю
+                        // «до установки» всё равно не достать, а свежие есть за глаза.
+                        // Поэтому из восходящего по дате прохода читаем последние
+                        // MAX_MESSAGES — лишние старые пропускаются OFFSET'ом.
+                        val count = db.queryFinalized("SELECT COUNT(*) FROM messages_v2 WHERE uid = $dialogId")
+                        val skip: Long
+                        try {
+                            count.next()
+                            skip = (count.longValue(0) - MAX_MESSAGES).coerceAtLeast(0L)
+                        } finally {
+                            count.dispose()
+                        }
+                        if (skip > 0) truncated = true
                         val cursor: SQLiteCursor = db.queryFinalized(
                             // dialogId приходит из нашего же кода, а не от пользователя:
                             // подставлять его в SQL без экранирования безопасно.
-                            "SELECT data, mid, date FROM messages_v2 WHERE uid = $dialogId ORDER BY date ASC, mid ASC",
+                            "SELECT data, mid, date FROM messages_v2 WHERE uid = $dialogId " +
+                                "ORDER BY date ASC, mid ASC LIMIT $MAX_MESSAGES OFFSET $skip",
                         )
                         try {
                             while (cursor.next()) {

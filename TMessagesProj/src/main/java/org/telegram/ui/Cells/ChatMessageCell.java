@@ -73,6 +73,7 @@ import android.text.style.DynamicDrawableSpan;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.URLSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Pair;
 import android.util.Property;
 import android.util.SparseArray;
@@ -1795,6 +1796,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     public StaticLayout timeLayout;
     public int timeWidth;
     public int timeTextWidth;
+    /** DuckDuckGram: сколько повторных копий свернуто в этот пузырь (0 = нет серии). */
+    public int collapsedCount;
     public int timeX;
     public int signWidth;
     private SpannableStringBuilder currentTimeString;
@@ -18845,9 +18848,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         allowAssistant = value;
     }
 
-    private void measureTime(MessageObject messageObject) {
+    public void measureTime(MessageObject messageObject) {
         CharSequence signString;
         MessageObject primaryMessageObject = getPrimaryMessageObject();
+        if (messageObject == null) {
+            messageObject = primaryMessageObject != null ? primaryMessageObject : getMessageObject();
+        }
+        // Ddg: клетка может быть ещё не привязана (currentMessageObject == null) —
+        // без этой защиты возможен NPE при вызове из обработчика сворачивания.
+        if (messageObject == null || messageObject.messageOwner == null || currentMessageObject == null) {
+            return;
+        }
+        if (primaryMessageObject == null) {
+            primaryMessageObject = messageObject;
+        }
         long fromId = messageObject.getFromChatId();
         if (messageObject.scheduled) {
             signString = null;
@@ -18991,6 +19005,30 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             ((SpannableStringBuilder) timeString).append(" | ").append(String.valueOf(messageObject.messageOwner.id));
         }
         currentTimeString = new SpannableStringBuilder(timeString);
+        // Ddg: счётчик свернутых повторов — «12:34 ×5». Значение выставляется
+        // адаптером (bind / re-attach) перед setMessageObject, поэтому пересборка
+        // подписи всегда видит свежую цифру, а холостой вызов — 0.
+        // Цвет «×N» берётся из пресета-градиента: при 2 повторах — начало пары,
+        // при 12+ — конец, между ними — плавный переход.
+        if (collapsedCount > 1) {
+            int gradientIndex = Math.min(Math.max(DdgConfig.collapseGradient.Int(), 0), DdgConfig.COLLAPSE_GRADIENT_ENDS.length - 1);
+            int endColor = DdgConfig.COLLAPSE_GRADIENT_ENDS[gradientIndex];
+            int startColor;
+            if (currentMessageObject != null && currentMessageObject.isOutOwner()) {
+                startColor = getThemedColor(isDrawSelectionBackground() ? Theme.key_chat_outTimeSelectedText : Theme.key_chat_outTimeText);
+            } else {
+                startColor = getThemedColor(isDrawSelectionBackground() ? Theme.key_chat_inTimeSelectedText : Theme.key_chat_inTimeText);
+            }
+            float progress = MathUtils.clamp((collapsedCount - 2) / 10f, 0f, 1f);
+            int badgeColor = ColorUtils.blendARGB(startColor, endColor, progress);
+            int badgeStart = currentTimeString.length();
+            if (currentTimeString.length() == 0) {
+                currentTimeString.append("×").append(String.valueOf(collapsedCount));
+            } else {
+                currentTimeString.append(" ×").append(String.valueOf(collapsedCount));
+            }
+            currentTimeString.setSpan(new ForegroundColorSpan(badgeColor), badgeStart, currentTimeString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
         if (signString != null) {
             if (messageObject.messageOwner.via_business_bot_id != 0) {
                 currentTimeString.append(", ");

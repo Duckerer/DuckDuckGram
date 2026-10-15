@@ -118,4 +118,21 @@ public class DdgInterfaceActivity extends DdgCategoryActivity {
                     .edit().putInt("bubbleRadius", radius).apply();
         }
     }
+
+    @Override
+    protected void onToggleChanged(Row row, int position, boolean enabled) {
+        super.onToggleChanged(row, position, enabled);
+        if (row.config == DdgConfig.unreadMutesAbovePins) {
+            // Сортировщик читает галочку только в момент сортировки списка чатов:
+            // без перезагрузки переключение выглядело бы как «ничего не произошло»
+            // до следующего релиза/перезапуска.
+            for (int account = 0; account < org.telegram.messenger.UserConfig.MAX_ACCOUNT_COUNT; account++) {
+                if (!org.telegram.messenger.UserConfig.isValidAccount(account)) {
+                    continue;
+                }
+                org.telegram.messenger.NotificationCenter.getInstance(account)
+                        .postNotificationName(org.telegram.messenger.NotificationCenter.dialogsNeedReload);
+            }
+        }
+    }
 }

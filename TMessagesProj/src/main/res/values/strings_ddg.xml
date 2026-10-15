@@ -78,6 +78,9 @@
     <string name="DDGKeepOriginalFileNames">Keep original file names</string>
     <string name="DDGHideMessageTime">Hide time in messages</string>
     <string name="DDGHideMessageTimeInfo">Removes the timestamp inside message bubbles. Read receipts stay visible.</string>
+    <string name="DDGCollapseDuplicateMessages">Collapse repeated messages</string>
+    <string name="DDGCollapseDuplicateMessagesInfo">Identical consecutive messages from the same sender are shown as a single bubble with the total count; your own messages are never collapsed</string>
+    <string name="DDGCollapseGradient">Counter color</string>
 
     <!-- Media -->
     <string name="DDGRestyledPlayer">Restyled audio player</string>

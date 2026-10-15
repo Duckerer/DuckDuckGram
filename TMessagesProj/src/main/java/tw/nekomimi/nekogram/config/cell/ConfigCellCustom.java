@@ -17,6 +17,8 @@ public class ConfigCellCustom extends AbstractConfigCell implements WithKey {
     public static final int CUSTOM_ITEM_ClearDataCard = 990;
     public static final int CUSTOM_ITEM_DeletedMessagesAppearanceCard = 989;
     public static final int CUSTOM_ITEM_DeletedMessagesColorPicker = 988;
+    public static final int CUSTOM_ITEM_DdgCollapseAppearanceCard = 987;
+    public static final int CUSTOM_ITEM_DdgCollapseColorPicker = 986;
 
     public final int type;
     public boolean enabled;

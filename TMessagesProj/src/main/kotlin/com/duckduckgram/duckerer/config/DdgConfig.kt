@@ -90,6 +90,42 @@ object DdgConfig {
     val highlightAllChats = addConfig("DDGHighlightAllChats", ConfigItem.configTypeBool, false)
 
     /**
+     * Сворачивание повторов: идущие подряд одинаковые сообщения одного
+     * отправителя показываются одним пузырём (новейшим), а в подписи времени
+     * добавляется «×N». Свои (исходящие) не сворачиваются. Одинаковыми считаются
+     * повторяющийся текст без медиа, а также стикеры/эмодзи/dice с тем же
+     * содержимым. Спрятанные копии остаются настоящими сообщениями — скрытие
+     * только в списке (те же 1px-строки, что у скрытых сообщений AyuGram).
+     */
+    @JvmField
+    val collapseDuplicateMessages = addConfig("DDGCollapseDuplicateMessages", ConfigItem.configTypeBool, false)
+
+    /**
+     * Пресет градиента цвета счётчика повторов: индекс в [COLLAPSE_GRADIENTS].
+     * При 2 повторах цвет совпадает с началом пары, при 12+ — с концом, между
+     * ними — плавный переход (ColorUtils.blendARGB).
+     */
+    @JvmField
+    val collapseGradient = addConfig("DDGCollapseGradient", ConfigItem.configTypeInt, 0)
+
+    /**
+     * Пары цветов [start, end] для счётчика повторов. Индексы совпадают со
+     * значениями [collapseGradient] и строками в strings_ddg.xml (DDGCollapseGradient*).
+     * Начальный цвет всегда дефолтный цвет времени (входящего/исходящего),
+     * конечный — выбранный цвет из палитры удалённых сообщений (как в AyuMoments).
+     */
+@JvmField
+    val COLLAPSE_GRADIENT_ENDS: IntArray = intArrayOf(
+        0xFFFF0000.toInt(),
+        0xFFDC2626.toInt(),
+        0xFFDB2777.toInt(),
+        0xFFC026D3.toInt(),
+        0xFF9333EA.toInt(),
+        0xFF4F46E5.toInt(),
+        0xFF2563EB.toInt()
+    )
+
+    /**
      * Быстрый шеринг медиа: удержание пузыря открывает недавние чаты поверх него.
      *
      * Значение по умолчанию — включено: кнопка и жест в форке работали всегда, и
@@ -418,10 +454,6 @@ object DdgConfig {
 
     // ---- Plugins ----
 
-    /** Java-плагины: загрузка .ddgjava рядом с Python-плагинами. */
-    @JvmField
-    val javaPlugins = addConfig("DDGJavaPlugins", ConfigItem.configTypeBool, true)
-
     /** Compatibility Mode: код входа всегда приходит по SMS. */
     @JvmField
     val compatibilityMode = addConfig("DDGCompatibilityMode", ConfigItem.configTypeBool, false)
@@ -433,10 +465,6 @@ object DdgConfig {
     val supporterBadge = addConfig("DDGSupporterBadge", ConfigItem.configTypeBool, true)
 
     // ---- Login ----
-
-    /** Вход как бот по токену. */
-    @JvmField
-    val loginAsBot = addConfig("DDGLoginAsBot", ConfigItem.configTypeBool, false)
 
     /** Тестовый бэкенд Telegram. */
     @JvmField
@@ -530,11 +558,16 @@ object DdgConfig {
     }
 
     /**
-     * Каналы уведомлений о сообщениях в форке называются `"<номер аккаунта>channel_"`.
+     * Каналы уведомлений о сообщениях в форке называются
+     * `"<номер аккаунта>channel_<диалог>_<случайное>"`, например "0channel_123_456".
      * Всё остальное живёт в других: служебное — в `Other<случайное>`, входящий звонок
      * — в `incoming_calls4<n>`.
+     *
+     * <p>Regex.matches() требует совпадения со всей строкой, поэтому без `.*` в конце
+     * реальный канал "0channel_123_456" не матчился бы ни разу, и уже показанные
+     * уведомления не снимались.
      */
-    private val MESSAGE_CHANNEL = Regex("^\\d+channel_")
+    private val MESSAGE_CHANNEL = Regex("^\\d+channel_.*")
 
     /**
      * Снимает с экрана уже показанные уведомления о сообщениях.

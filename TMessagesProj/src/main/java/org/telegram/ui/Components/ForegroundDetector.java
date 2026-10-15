@@ -17,9 +17,9 @@ import android.view.WindowManager;
 
 import com.duckduckgram.duckerer.config.DdgConfig;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.pip.activity.IPipActivity;
-import org.telegram.messenger.pip.utils.PipUtils;
 
 import java.util.Collections;
 import java.util.Set;
@@ -194,7 +194,22 @@ public class ForegroundDetector implements Application.ActivityLifecycleCallback
                 if (!enabled || securedByPrivacyScreen.contains(activity)) {
                     return;
                 }
-                if (activity instanceof IPipActivity && PipUtils.useAutoEnterInPictureInPictureMode()) {
+                // Чужой FLAG_SECURE (StoryViewer, BubbleActivity, PasscodeViewDialog,
+                // TranslateAlert2, PaymentFormActivity ставят его сами): окно не берём
+                // в собственность, иначе на возврате clearFlags() сотрёт их защиту —
+                // получалось, что после фона пузырь чата или форма оплаты теряли
+                // FLAG_SECURE и их можно было снять на скриншот.
+                if ((activity.getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_SECURE) != 0) {
+                    return;
+                }
+                // Исключение — окно, ДЕЙСТВИТЕЛЬНО уходящее в системный PiP: флаг на нём
+                // опустошил бы сам PiP-кадр. Раньше проверка была «instanceof IPip и SDK
+                // >= S» и срабатывала на любом Android 12/12L (это обещает auto-enter-PiP,
+                // а не факт входа в него): обычное сворачивание чата на API 31-32 уходило
+                // вообще без FLAG_SECURE и превью в списке задач показывало переписку.
+                // Проверяем фактический вход в PiP — той же сигнал, на который опирается
+                // и сам PipActivityHandler.onPause.
+                if (activity instanceof IPipActivity && AndroidUtilities.isInPictureInPictureMode(activity)) {
                     return;
                 }
                 securedByPrivacyScreen.add(activity);

@@ -52,7 +52,11 @@ object DdgViewOnce {
     private fun isSelfDestructing(message: MessageObject): Boolean {
         val owner = message.messageOwner ?: return false
         val ttl = owner.ttl
-        if (ttl == 0 || ttl == TTL_NEVER) {
+        // TTL_NEVER — это не «бессрочное», а маркер view-once этого форка: облачное
+        // view-once хранится в базе с ttl == 0x7FFFFFFF (см. messages_v2.ttl и
+        // SecretMediaViewer.ignoreDelete). Раньше такое медиа пропускалось и фича
+        // не работала ровно для настоящих view-once.
+        if (ttl == 0) {
             return false
         }
         return owner.media is TLRPC.TL_messageMediaPhoto || owner.media is TLRPC.TL_messageMediaDocument
@@ -144,7 +148,7 @@ object DdgViewOnce {
                     }
                 }
             }
-            FileLog.d("DDG view-once: копия сохранена " + output.getAbsolutePath())
+            FileLog.d("DDG view-once: копия сохранена, " + output.length() + " байт")
             output
         } catch (e: Throwable) {
             FileLog.e("DDG view-once: не удалось сохранить копию", e)
